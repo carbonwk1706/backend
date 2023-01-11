@@ -4,12 +4,14 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const dotenv = require('dotenv')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
 
 mongoose.set('strictQuery', false)
+dotenv.config()
 mongoose.connect('mongodb://localhost:27017/Project_intern')
 const app = express()
 

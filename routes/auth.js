@@ -1,6 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
+function generateAccessToken (user) {
+  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '1d' })
+}
 
 const login = async function (req, res, next) {
   const username = req.body.username
@@ -12,7 +16,8 @@ const login = async function (req, res, next) {
         message: 'User not found!!'
       })
     }
-    res.json(user)
+    const token = generateAccessToken({ username: user.username, roles: user.roles })
+    res.json({ user, token })
   } catch (err) {
     return res.status(404).send({
       message: err.message
