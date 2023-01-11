@@ -16,7 +16,20 @@ const authenMiddleware = function (req, res, next) {
     next()
   })
 }
+
+const authorizeMiddleware = function (roles) {
+  return function (req, res, next) {
+    for (let i = 0; i < roles.length; i++) {
+      if (req.user.roles.indexOf(roles[i]) >= 0) {
+        next()
+        return
+      }
+    }
+    res.sendStatus(401)
+  }
+}
 module.exports = {
   generateAccessToken,
-  authenMiddleware
+  authenMiddleware,
+  authorizeMiddleware
 }
