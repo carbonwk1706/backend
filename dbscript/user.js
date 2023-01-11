@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
-const User = require('../model/User')
+const User = require('../models/User')
 const { ROLE } = require('../constant')
-mongoose.connect('mongodb://localhost:27017/example')
+mongoose.set('strictQuery', false)
+mongoose.connect('mongodb://localhost:27017/Project_intern', { useNewUrlParser: true })
 async function clearUser () {
   await User.deleteMany({})
 }
@@ -14,6 +15,6 @@ async function main () {
   admin.save()
 }
 
-main().then(function () {
+main().then(() => {
   console.log('Finish')
 })

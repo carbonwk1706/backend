@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../model/User')
+const User = require('../models/User')
 
-// All users
 const getUsers = async function (req, res, next) {
   try {
     const users = await User.find({}).exec()
@@ -14,7 +13,6 @@ const getUsers = async function (req, res, next) {
   }
 }
 
-// Get user id
 const getUser = async function (req, res, next) {
   const userId = req.params.id
   try {

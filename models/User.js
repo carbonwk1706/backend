@@ -1,4 +1,4 @@
-const { ROLE } = require('../constant.js')
+const { ROLE } = require('../constant')
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const userSchema = Schema({
