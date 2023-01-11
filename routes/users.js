@@ -54,7 +54,11 @@ const updateUser = async function (req, res, next) {
     user.name = req.body.name
     user.username = req.body.username
     user.password = req.body.password
-    user.roles = req.body.roles
+    if (req.body.roles === '') {
+      user.roles = 'USER'
+    } else {
+      user.roles = req.body.roles
+    }
     await user.save()
     return res.status(200).json(user)
   } catch (err) {
