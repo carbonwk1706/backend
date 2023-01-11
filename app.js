@@ -5,6 +5,7 @@ const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv')
+const { authenMiddleware } = require('./helpers/auth')
 
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
@@ -23,7 +24,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/users', authenMiddleware, usersRouter)
 app.use('/auth', authRouter)
 
 module.exports = app

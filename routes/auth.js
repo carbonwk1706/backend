@@ -1,10 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
-const jwt = require('jsonwebtoken')
-function generateAccessToken (user) {
-  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '1d' })
-}
+const { generateAccessToken } = require('../helpers/auth')
 
 const login = async function (req, res, next) {
   const username = req.body.username
