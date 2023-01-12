@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const User = require('../models/User')
 const generateAccessToken = function (user) {
   return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '1d' })
 }
@@ -8,11 +9,10 @@ const authenMiddleware = function (req, res, next) {
   const authHeader = req.headers.authorization
   const token = authHeader && authHeader.split(' ')[1]
   if (token === null) return res.sendStatus(401)
-  jwt.verify(token, process.env.TOKEN_SECRET, function (err, user) {
-    console.log(err)
+  jwt.verify(token, process.env.TOKEN_SECRET, async function (err, user) {
     if (err) return res.sendStatus(403)
-    req.user = user
-    console.log(user)
+    const currentUser = await User.findById(user._id).exec()
+    req.user = currentUser
     next()
   })
 }

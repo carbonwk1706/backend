@@ -13,7 +13,7 @@ const login = async function (req, res, next) {
         message: 'User not found!!'
       })
     }
-    const token = generateAccessToken({ username: user.username, roles: user.roles })
+    const token = generateAccessToken({ _id: user.id, username: user.username })
     res.json({ user, token })
   } catch (err) {
     return res.status(404).send({
