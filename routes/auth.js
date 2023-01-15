@@ -46,6 +46,7 @@ const register = async function (req, res, next) {
       })
       await newUser.save()
       res.status(201).json(newUser)
+      pass = false
     }
   } catch (err) {
     return res.status(500).send({
