@@ -24,5 +24,36 @@ const login = async function (req, res, next) {
   }
 }
 
+const register = async function (req, res, next) {
+  const name = req.body.name
+  const username = req.body.username
+  const password = req.body.password
+  const roles = req.body.roles
+  let pass = false
+  try {
+    const user = await User.find({ }).exec()
+    for (let i = 0; i < user.length; i++) {
+      if (user[i].username !== username) {
+        pass = true
+      }
+    }
+    if (pass) {
+      const newUser = new User({
+        name,
+        username,
+        password,
+        roles
+      })
+      await newUser.save()
+      res.status(201).json(newUser)
+    }
+  } catch (err) {
+    return res.status(500).send({
+      message: err.message
+    })
+  }
+}
+
 router.post('/login', login)
+router.post('/register', register)
 module.exports = router

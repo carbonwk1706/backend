@@ -9,10 +9,10 @@ async function clearUser () {
 
 async function main () {
   await clearUser()
-  const users = new User({ name: 'Wuttiwat Phoemsirikawinkun', username: 'user', password: 'password', roles: [ROLE.USER] })
-  users.save()
-  const admin = new User({ name: 'Admin', username: 'admin', password: 'password', roles: [ROLE.ADMIN, ROLE.USER] })
-  admin.save()
+  const users = new User({ name: 'Wuttiwat Phoemsirikawinkun', username: 'user@mail.com', password: 'password', roles: [ROLE.USER] })
+  await users.save()
+  const admin = new User({ name: 'Admin', username: 'admin@mail.com', password: 'password', roles: [ROLE.ADMIN, ROLE.USER] })
+  await admin.save()
 }
 
 main().then(() => {
