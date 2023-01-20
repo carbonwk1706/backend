@@ -4,4 +4,6 @@ const ROLE = {
   USER: 'USER'
 }
 
-module.exports = { ROLE }
+module.exports = {
+  ROLE
+}

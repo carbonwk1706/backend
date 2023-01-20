@@ -24,6 +24,32 @@ const login = async function (req, res, next) {
   }
 }
 
+const checkDuplicate = async function (req, res, next) {
+  const name = req.body.name
+  const username = req.body.username
+  const password = req.body.password
+  const roles = req.body.roles
+  try {
+    const user = await User.findOne({ username }).exec()
+    if (user) {
+      return res.status(409).json({
+        message: 'Username already exists'
+      })
+    }
+    const newUser = new User({
+      name,
+      username,
+      password,
+      roles
+    })
+    res.status(201).json(newUser)
+  } catch (err) {
+    return res.status(500).send({
+      message: err.message
+    })
+  }
+}
+
 const register = async function (req, res, next) {
   const name = req.body.name
   const username = req.body.username
@@ -42,7 +68,7 @@ const register = async function (req, res, next) {
       password,
       roles
     })
-    await newUser.save()
+    newUser.save()
     res.status(201).json(newUser)
   } catch (err) {
     return res.status(500).send({
@@ -52,5 +78,6 @@ const register = async function (req, res, next) {
 }
 
 router.post('/login', login)
+router.post('/duplicate', checkDuplicate)
 router.post('/register', register)
 module.exports = router

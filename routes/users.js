@@ -7,7 +7,7 @@ const getUsers = async function (req, res, next) {
     const users = await User.find({}).exec()
     res.status(200).json(users)
   } catch (err) {
-    return res.status(403).send({
+    return res.status(500).send({
       message: err.message
     })
   }
