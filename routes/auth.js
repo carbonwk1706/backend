@@ -9,17 +9,22 @@ const login = async function (req, res, next) {
   const password = req.body.password
   try {
     const user = await User.findOne({ username }).exec()
+    if (!user) {
+      return res.status(403).json({
+        message: 'Invalid username or password'
+      })
+    }
     const verifyResult = await bcrypt.compare(password, user.password)
     if (!verifyResult) {
-      return res.status(404).json({
+      return res.status(403).json({
         message: 'User not found!!'
       })
     }
     const token = generateAccessToken({ _id: user.id, username: user.username })
     res.json({ user: { _id: user._id, name: user.name, username: user.username, email: user.email, gender: user.gender, roles: user.roles }, token })
   } catch (err) {
-    return res.status(403).send({
-      message: err.message
+    return res.status(500).json({
+      message: 'Internal server error'
     })
   }
 }
