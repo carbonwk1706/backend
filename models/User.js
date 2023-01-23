@@ -1,6 +1,7 @@
 const { ROLE } = require('../constant')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const gravatar = require('gravatar')
 const { Schema } = mongoose
 const userSchema = Schema({
   name: {
@@ -28,7 +29,7 @@ const userSchema = Schema({
   },
   imageUrl: {
     type: String,
-    default: 'http://localhost:3000/uploads/847969.png'
+    default: function () { return gravatar.url(this.username, { s: '200', r: 'pg', d: 'mm' }, true) }
   }
 })
 
