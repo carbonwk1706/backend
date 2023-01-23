@@ -9,9 +9,11 @@ async function clearUser () {
 
 async function main () {
   await clearUser()
-  const users = new User({ name: 'Wuttiwat Phoemsirikawinkun', username: 'user@mail.com', password: 'password', roles: [ROLE.USER] })
+  const users = new User({ name: 'Wuttiwat Phoemsirikawinkun', username: 'wuttiwat', email: 'user@mail.com', gender: 'Male', password: 'password', roles: [ROLE.USER] })
   await users.save()
-  const admin = new User({ name: 'Admin', username: 'admin@mail.com', password: 'password', roles: [ROLE.ADMIN, ROLE.USER] })
+  const localAdmin = new User({ name: 'LocalAdmin', username: 'localadmin', password: 'password', email: 'localadmin@mail.com', gender: 'Female', roles: [ROLE.LOCAL_ADMIN, ROLE.USER] })
+  await localAdmin.save()
+  const admin = new User({ name: 'Admin', username: 'admin', password: 'password', email: 'admin@mail.com', gender: 'Female', roles: [ROLE.ADMIN, ROLE.USER] })
   await admin.save()
 }
 
