@@ -3,14 +3,32 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const { Schema } = mongoose
 const userSchema = Schema({
-  name: String,
-  username: String,
-  password: String,
-  email: String,
+  name: {
+    type: String,
+    required: true
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
   gender: String,
   roles: {
     type: [String],
     default: [ROLE.USER]
+  },
+  imageUrl: {
+    type: String,
+    default: 'http://localhost:3000/uploads/847969.png'
   }
 })
 

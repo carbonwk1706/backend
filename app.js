@@ -11,6 +11,7 @@ const { ROLE } = require('./constant')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
+const uploadRouter = require('./routes/upload')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -27,5 +28,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), usersRouter)
 app.use('/auth', authRouter)
+app.use('/upload', uploadRouter)
 
 module.exports = app
