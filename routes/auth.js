@@ -16,33 +16,32 @@ const login = async function (req, res, next) {
       })
     }
     const token = generateAccessToken({ _id: user.id, username: user.username })
-    res.json({ user: { _id: user._id, name: user.name, username: user.username, roles: user.roles }, token })
+    res.json({ user: { _id: user._id, name: user.name, username: user.username, email: user.email, gender: user.gender, roles: user.roles }, token })
   } catch (err) {
-    return res.status(404).send({
+    return res.status(403).send({
       message: err.message
     })
   }
 }
 
 const checkDuplicate = async function (req, res, next) {
-  const name = req.body.name
   const username = req.body.username
-  const password = req.body.password
-  const roles = req.body.roles
+  const email = req.body.email
   try {
-    const user = await User.findOne({ username }).exec()
-    if (user) {
+    const duplicateUsername = await User.findOne({ username }).exec()
+    if (duplicateUsername) {
       return res.status(409).json({
         message: 'Username already exists'
       })
     }
-    const newUser = new User({
-      name,
-      username,
-      password,
-      roles
-    })
-    res.status(201).json(newUser)
+
+    const duplicateEmail = await User.findOne({ email }).exec()
+    if (duplicateEmail) {
+      return res.status(409).json({
+        message: 'Email already exists'
+      })
+    }
+    res.status(201)
   } catch (err) {
     return res.status(500).send({
       message: err.message
@@ -54,27 +53,20 @@ const register = async function (req, res, next) {
   const name = req.body.name
   const username = req.body.username
   const password = req.body.password
+  const email = req.body.email
+  const gender = req.body.gender
   const roles = req.body.roles
-  try {
-    const user = await User.findOne({ username }).exec()
-    if (user) {
-      return res.status(409).json({
-        message: 'Username already exists'
-      })
-    }
-    const newUser = new User({
-      name,
-      username,
-      password,
-      roles
-    })
-    newUser.save()
-    res.status(201).json(newUser)
-  } catch (err) {
-    return res.status(500).send({
-      message: err.message
-    })
-  }
+
+  const newUser = new User({
+    name,
+    username,
+    password,
+    email,
+    gender,
+    roles
+  })
+  newUser.save()
+  res.status(201).json(newUser)
 }
 
 router.post('/login', login)

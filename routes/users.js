@@ -35,6 +35,8 @@ const addUsers = async function (req, res, next) {
     name: req.body.name,
     username: req.body.username,
     password: req.body.password,
+    email: req.body.email,
+    gender: req.body.gender,
     roles: req.body.roles
   })
   try {
@@ -54,6 +56,8 @@ const updateUser = async function (req, res, next) {
     user.name = req.body.name
     user.username = req.body.username
     user.password = req.body.password
+    user.email = req.body.email
+    user.gender = req.body.gender
     user.roles = req.body.roles
     await user.save()
     return res.status(200).json(user)
