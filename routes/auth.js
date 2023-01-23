@@ -29,19 +29,24 @@ const checkDuplicate = async function (req, res, next) {
   const email = req.body.email
   try {
     const duplicateUsername = await User.findOne({ username }).exec()
-    if (duplicateUsername) {
+    const duplicateEmail = await User.findOne({ email }).exec()
+
+    if (duplicateUsername && duplicateEmail) {
+      return res.status(409).json({
+        message: 'Username and Email already exists'
+      })
+    } else if (duplicateUsername) {
       return res.status(409).json({
         message: 'Username already exists'
       })
-    }
-
-    const duplicateEmail = await User.findOne({ email }).exec()
-    if (duplicateEmail) {
+    } else if (duplicateEmail) {
       return res.status(409).json({
         message: 'Email already exists'
       })
     }
-    res.status(201)
+    res.status(201).json({
+      message: 'Username and Email already'
+    })
   } catch (err) {
     return res.status(500).send({
       message: err.message
@@ -56,17 +61,22 @@ const register = async function (req, res, next) {
   const email = req.body.email
   const gender = req.body.gender
   const roles = req.body.roles
-
-  const newUser = new User({
-    name,
-    username,
-    password,
-    email,
-    gender,
-    roles
-  })
-  newUser.save()
-  res.status(201).json(newUser)
+  try {
+    const newUser = new User({
+      name,
+      username,
+      password,
+      email,
+      gender,
+      roles
+    })
+    newUser.save()
+    res.status(201).json(newUser)
+  } catch (err) {
+    return res.status(500).send({
+      message: err.message
+    })
+  }
 }
 
 router.post('/login', login)
