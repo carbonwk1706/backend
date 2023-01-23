@@ -6,6 +6,8 @@ const userSchema = Schema({
   name: String,
   username: String,
   password: String,
+  email: String,
+  gender: String,
   roles: {
     type: [String],
     default: [ROLE.USER]
