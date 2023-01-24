@@ -4,6 +4,12 @@ const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
 const { Schema } = mongoose
 const userSchema = Schema({
+  imageUrl: {
+    type: String,
+    default: function () { return gravatar.url(this.username, { s: '200', r: 'pg', d: 'mm' }, true) }
+  },
+  firstName: String,
+  lastName: String,
   name: {
     type: String,
     required: true
@@ -22,14 +28,11 @@ const userSchema = Schema({
     required: true,
     unique: true
   },
+  phone: String,
   gender: String,
   roles: {
     type: [String],
     default: [ROLE.USER]
-  },
-  imageUrl: {
-    type: String,
-    default: function () { return gravatar.url(this.username, { s: '200', r: 'pg', d: 'mm' }, true) }
   }
 })
 
