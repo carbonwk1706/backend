@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
 const uploadRouter = require('./routes/upload')
+const profileRouter = require('./routes/profile')
 const booksRouter = require('./routes/books')
 
 mongoose.set('strictQuery', false)
@@ -30,6 +31,7 @@ app.use('/', indexRouter)
 app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), usersRouter)
 app.use('/auth', authRouter)
 app.use('/upload', uploadRouter)
+app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), profileRouter)
 app.use('/books', booksRouter)
 
 module.exports = app
