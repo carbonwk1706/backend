@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
 const uploadRouter = require('./routes/upload')
+const profileRouter = require('./routes/profile')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -29,5 +30,6 @@ app.use('/', indexRouter)
 app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), usersRouter)
 app.use('/auth', authRouter)
 app.use('/upload', uploadRouter)
+app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), profileRouter)
 
 module.exports = app
