@@ -19,9 +19,6 @@ router.post('/', upload.single('image'), async (req, res) => {
   const host = req.headers.host
   const protocol = req.protocol
 
-  if (!req.file) {
-    return res.status(400).json({ error: 'No image file was provided' })
-  }
   const imageUrl = `${protocol}://${host}/uploads/${req.file.filename}`
 
   try {
