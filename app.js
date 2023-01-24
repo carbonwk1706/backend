@@ -29,7 +29,26 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), usersRouter)
 app.use('/auth', authRouter)
-app.use('/upload', uploadRouter)
+app.use('/upload', express.static('/uploads'), uploadRouter)
+app.get('/uploads/:filename', (req, res) => {
+  const options = {
+    root: path.join(__dirname, 'uploads'),
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  }
+  const fileName = req.params.filename
+  res.sendFile(fileName, options, (err) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log('Sent:', fileName)
+    }
+  })
+})
+
 app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), profileRouter)
 
 module.exports = app
