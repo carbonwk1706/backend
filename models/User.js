@@ -33,7 +33,10 @@ const userSchema = Schema({
   roles: {
     type: [String],
     default: [ROLE.USER]
-  }
+  },
+  requestHistory: [{
+    type: mongoose.Schema.Types.ObjectId, ref: 'Request'
+  }]
 })
 
 userSchema.pre('save', function (next) {
