@@ -13,6 +13,7 @@ const usersRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
 const uploadRouter = require('./routes/upload')
 const profileRouter = require('./routes/profile')
+const requestRouter = require('./routes/request')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -48,7 +49,7 @@ app.get('/uploads/:filename', (req, res) => {
     }
   })
 })
-
 app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), profileRouter)
+app.use('/request', requestRouter)
 
 module.exports = app
