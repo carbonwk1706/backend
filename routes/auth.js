@@ -10,14 +10,14 @@ const login = async function (req, res, next) {
   try {
     const user = await User.findOne({ username }).exec()
     if (!user) {
-      return res.status(403).json({
+      return res.status(200).json({
         message: 'Invalid username or password'
       })
     }
     const verifyResult = await bcrypt.compare(password, user.password)
     if (!verifyResult) {
-      return res.status(403).json({
-        message: 'User not found!!'
+      return res.status(200).json({
+        message: 'Invalid username or password'
       })
     }
     const token = generateAccessToken({ _id: user.id, username: user.username })
@@ -37,15 +37,15 @@ const checkDuplicate = async function (req, res, next) {
     const duplicateEmail = await User.findOne({ email }).exec()
 
     if (duplicateUsername && duplicateEmail) {
-      return res.status(409).json({
+      return res.status(200).json({
         message: 'Username and Email already exists'
       })
     } else if (duplicateUsername) {
-      return res.status(409).json({
+      return res.status(200).json({
         message: 'Username already exists'
       })
     } else if (duplicateEmail) {
-      return res.status(409).json({
+      return res.status(200).json({
         message: 'Email already exists'
       })
     }
