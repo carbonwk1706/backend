@@ -1,8 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Cart = require('../models/Cart')
-// const User = require('../models/User')
-// const Book = require('../models/Book')
+const User = require('../models/User')
 
 const getCartList = async function (req, res, next) {
   try {
@@ -25,10 +24,13 @@ const cartList = async function (req, res, next) {
   })
 
   try {
+    const findUser = await User.findById(newCartList.user)
+    findUser.cartHistory.push(newCartList)
     await newCartList.save()
+    await findUser.save()
 
     res.status(201).json({
-      newCartList
+      findUser
     })
   } catch (err) {
     return res.status(500).send({
