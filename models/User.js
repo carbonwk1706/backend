@@ -35,7 +35,12 @@ const userSchema = Schema({
     default: [ROLE.USER]
   },
   requestHistory: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Request'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Request'
+  }],
+  cartHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Cart'
   }]
 })
 
