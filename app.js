@@ -15,6 +15,7 @@ const uploadRouter = require('./routes/upload')
 const profileRouter = require('./routes/profile')
 const requestRouter = require('./routes/request')
 const booksRouter = require('./routes/books')
+const confirmPasswordRouter = require('./routes/confirmPassword')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -53,5 +54,6 @@ app.get('/uploads/:filename', (req, res) => {
 app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), profileRouter)
 app.use('/request', requestRouter)
 app.use('/books', booksRouter)
+app.use('/confirmPassword', confirmPasswordRouter)
 
 module.exports = app
