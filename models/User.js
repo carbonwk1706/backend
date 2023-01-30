@@ -29,6 +29,7 @@ const userSchema = Schema({
     unique: true
   },
   phone: String,
+  coin: Number,
   gender: String,
   roles: {
     type: [String],
