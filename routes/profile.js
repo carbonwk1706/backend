@@ -11,7 +11,7 @@ const getUser = async function (req, res, next) {
         message: 'User not found!!'
       })
     }
-    res.json({ user: { _id: user._id, imageUrl: user.imageUrl, firstName: user.firstName, lastName: user.lastName, name: user.name, username: user.username, email: user.email, phone: user.phone, gender: user.gender, roles: user.roles } })
+    res.json({ user: { _id: user._id, imageUrl: user.imageUrl, firstName: user.firstName, lastName: user.lastName, name: user.name, username: user.username, email: user.email, phone: user.phone, coin: user.coin, gender: user.gender, roles: user.roles } })
   } catch (err) {
     return res.status(404).send({
       message: err.message
