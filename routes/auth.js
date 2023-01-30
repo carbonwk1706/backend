@@ -36,17 +36,9 @@ const checkDuplicate = async function (req, res, next) {
     const duplicateUsername = await User.findOne({ username }).exec()
     const duplicateEmail = await User.findOne({ email }).exec()
 
-    if (duplicateUsername && duplicateEmail) {
+    if (duplicateUsername || duplicateEmail) {
       return res.status(200).json({
         message: 'Username and Email already exists'
-      })
-    } else if (duplicateUsername) {
-      return res.status(200).json({
-        message: 'Username already exists'
-      })
-    } else if (duplicateEmail) {
-      return res.status(200).json({
-        message: 'Email already exists'
       })
     }
     res.status(201).json({
