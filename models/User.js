@@ -10,6 +10,7 @@ const userSchema = Schema({
   },
   firstName: String,
   lastName: String,
+  idCard: String,
   name: {
     type: String,
     required: true
@@ -29,6 +30,14 @@ const userSchema = Schema({
     unique: true
   },
   phone: String,
+  address: String,
+  road: String,
+  subDistrict: String,
+  district: String,
+  province: String,
+  postCode: String,
+  bankAccount: String,
+  idAccount: String,
   coin: {
     type: Number,
     require: true,
