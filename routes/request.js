@@ -7,8 +7,8 @@ const request = async function (req, res, next) {
   const user = req.body.user
   const request = req.body.request
   const publisher = req.body.publisher
-  const name = req.body.name
-  const surname = req.body.surname
+  const fistName = req.body.fistName
+  const lastName = req.body.lastName
   const idCard = req.body.idCard
   const phone = req.body.phone
   const address = req.body.address
@@ -24,8 +24,8 @@ const request = async function (req, res, next) {
     user,
     request,
     publisher,
-    name,
-    surname,
+    fistName,
+    lastName,
     idCard,
     phone,
     address,
