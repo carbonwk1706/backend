@@ -8,6 +8,7 @@ const userSchema = Schema({
     type: String,
     default: function () { return gravatar.url(this.username, { s: '200', r: 'pg', d: 'mm' }, true) }
   },
+  publisher: String,
   firstName: String,
   lastName: String,
   idCard: String,
