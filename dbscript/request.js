@@ -10,7 +10,7 @@ async function clearRequest () {
 async function main () {
   await clearRequest()
   const request = new Request({
-    user: '63db3431c5a9963f49f737c6',
+    user: '63db3e402e339eed697de8c3',
     request: 'ROLE.[SELL]',
     status: 'pending',
     publisher: 'กัปตัน',
@@ -27,7 +27,7 @@ async function main () {
     bankAccount: '1234569871',
     idAccount: '1234567895'
   })
-  const id = '63db3431c5a9963f49f737c6'
+  const id = '63db3e402e339eed697de8c3'
   const user = await User.findById(id).exec()
   user.requestHistory.push(request)
   await request.save()

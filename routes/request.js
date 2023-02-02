@@ -73,8 +73,50 @@ const getRequest = async function (req, res, next) {
   }
 }
 
+const approveRequest = async function (req, res, next) {
+  const id = req.params.id
+  try {
+    const request = await Request.findById(id)
+    if (!request) return res.status(404).send('Request not found')
+    request.status = 'approved'
+    await request.save()
+    const user = await User.findById(request.user)
+    user.roles.push('SELL')
+    user.publisher = request.publisher
+    user.firstName = request.firstName
+    user.lastName = request.lastName
+    user.idCard = request.idCard
+    user.phone = request.phone
+    user.address = request.address
+    user.road = request.road
+    user.subDistrict = request.subDistrict
+    user.district = request.district
+    user.province = request.province
+    user.postCode = request.postCode
+    user.bankAccount = request.bankAccount
+    user.idAccount = request.idAccount
+    await user.save()
+  } catch (error) {
+
+  }
+}
+
+const rejectRequest = async function (req, res, next) {
+  const id = req.params.id
+  try {
+    const request = await Request.findById(id)
+    if (!request) return res.status(404).send('Request not found')
+    request.status = 'rejected'
+    await request.save()
+    res.send({ request })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+
 router.get('/', getRequests)
 router.get('/:id', getRequest)
 router.post('/', request)
-
+router.patch('/:id/approve', approveRequest)
+router.patch('/:id/reject', rejectRequest)
 module.exports = router
