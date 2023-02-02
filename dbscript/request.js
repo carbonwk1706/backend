@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Request = require('../models/Request')
+const User = require('../models/User')
 mongoose.set('strictQuery', false)
 mongoose.connect('mongodb://localhost:27017/Project_intern', { useNewUrlParser: true })
 async function clearRequest () {
@@ -9,7 +10,7 @@ async function clearRequest () {
 async function main () {
   await clearRequest()
   const request = new Request({
-    user: '63d0618ec6891a5004608c81',
+    user: '63db3431c5a9963f49f737c6',
     request: 'ROLE.[SELL]',
     status: 'pending',
     publisher: 'กัปตัน',
@@ -25,10 +26,13 @@ async function main () {
     postCode: '10900',
     bankAccount: '1234569871',
     idAccount: '1234567895'
-
   })
-
+  const id = '63db3431c5a9963f49f737c6'
+  const user = await User.findById(id).exec()
+  user.requestHistory.push(request)
   await request.save()
+  await user.save()
+  // await users.requestHistory.push(request)
 }
 
 main().then(() => {
