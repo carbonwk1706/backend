@@ -54,5 +54,16 @@ const request = async function (req, res, next) {
   }
 }
 
+const getRequest = async function (req, res, next) {
+  try {
+    const requests = await Request.find({ status: 'pending' })
+    res.send({ requests })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+
+router.get('/', getRequest)
 router.post('/', request)
+
 module.exports = router
