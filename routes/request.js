@@ -96,6 +96,7 @@ const approveRequest = async function (req, res, next) {
     user.bankAccount = request.bankAccount
     user.idAccount = request.idAccount
     await user.save()
+    res.send({ request, user })
   } catch (error) {
 
   }
