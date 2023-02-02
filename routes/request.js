@@ -7,7 +7,7 @@ const request = async function (req, res, next) {
   const user = req.body.user
   const request = req.body.request
   const publisher = req.body.publisher
-  const fistName = req.body.fistName
+  const firstName = req.body.fistName
   const lastName = req.body.lastName
   const idCard = req.body.idCard
   const phone = req.body.phone
@@ -24,7 +24,7 @@ const request = async function (req, res, next) {
     user,
     request,
     publisher,
-    fistName,
+    firstName,
     lastName,
     idCard,
     phone,
@@ -54,7 +54,7 @@ const request = async function (req, res, next) {
   }
 }
 
-const getRequest = async function (req, res, next) {
+const getRequests = async function (req, res, next) {
   try {
     const requests = await Request.find({ status: 'pending' })
     res.send({ requests })
@@ -63,7 +63,18 @@ const getRequest = async function (req, res, next) {
   }
 }
 
-router.get('/', getRequest)
+const getRequest = async function (req, res, next) {
+  const id = req.params.id
+  try {
+    const request = await Request.findById(id)
+    res.send({ request })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+}
+
+router.get('/', getRequests)
+router.get('/:id', getRequest)
 router.post('/', request)
 
 module.exports = router
