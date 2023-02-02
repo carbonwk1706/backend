@@ -17,6 +17,58 @@ const RequestSchema = Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
+  },
+  publisher: {
+    type: String,
+    require: true
+  },
+  firstName: {
+    type: String,
+    require: true
+  },
+  lastName: {
+    type: String,
+    require: true
+  },
+  idCard: {
+    type: String,
+    require: true
+  },
+  phone: {
+    type: String,
+    require: true
+  },
+  address: {
+    type: String,
+    require: true
+  },
+  road: {
+    type: String,
+    require: true
+  },
+  subDistrict: {
+    type: String,
+    require: true
+  },
+  district: {
+    type: String,
+    require: true
+  },
+  province: {
+    type: String,
+    require: true
+  },
+  postCode: {
+    type: String,
+    require: true
+  },
+  bankAccount: {
+    type: String,
+    require: true
+  },
+  idAccount: {
+    type: String,
+    require: true
   }
 })
 
