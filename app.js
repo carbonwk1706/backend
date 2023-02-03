@@ -32,8 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), usersRouter)
 app.use('/auth', authRouter)
-app.use('/upload', express.static('/uploads'), uploadRouter)
-app.get('/uploads/:filename', (req, res) => {
+app.use('/upload', express.static('/uploads'), authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), uploadRouter)
+app.get('/uploads/:filename', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), (req, res) => {
   const options = {
     root: path.join(__dirname, 'uploads'),
     dotfiles: 'deny',
@@ -52,8 +52,8 @@ app.get('/uploads/:filename', (req, res) => {
   })
 })
 app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), profileRouter)
-app.use('/request', requestRouter)
+app.use('/request', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), requestRouter)
 app.use('/books', booksRouter)
-app.use('/confirmPassword', confirmPasswordRouter)
+app.use('/confirmPassword', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER]), confirmPasswordRouter)
 
 module.exports = app
