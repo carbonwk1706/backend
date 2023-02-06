@@ -17,6 +17,7 @@ const requestRouter = require('./routes/request')
 const booksRouter = require('./routes/books')
 const confirmPasswordRouter = require('./routes/confirmPassword')
 const cartRouter = require('./routes/cart')
+const wishRouter = require('./routes/wishList')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -57,5 +58,6 @@ app.use('/request', requestRouter)
 app.use('/books', booksRouter)
 app.use('/confirmPassword', confirmPasswordRouter)
 app.use('/cart', cartRouter)
+app.use('/wish', wishRouter)
 
 module.exports = app
