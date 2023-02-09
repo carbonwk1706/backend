@@ -35,6 +35,28 @@ const getWishLists = async function (req, res, next) {
   }
 }
 
+const deleteWish = async function (req, res, next) {
+  const wishId = req.params.id
+  try {
+    const user = await User.findOne({ wishList: { $elemMatch: { _id: wishId } } })
+    console.log('wish', wishId)
+    if (!user) {
+      return res.status(404).json({
+        message: 'Wish not found!!'
+      })
+    }
+    user.wishList.pull({ _id: wishId })
+    await user.save()
+
+    return res.status(200).send()
+  } catch (err) {
+    return res.status(404).send({
+      message: err.message
+    })
+  }
+}
+
 router.get('/', getWishLists)
+router.delete('/:id', deleteWish)
 router.post('/', wishList)
 module.exports = router
