@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
 const { Schema } = mongoose
+
 const userSchema = Schema({
   imageUrl: {
     type: String,
@@ -50,8 +51,10 @@ const userSchema = Schema({
     default: [ROLE.USER]
   },
   requestHistory: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Request'
-  }]
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Request'
+  }],
+  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
 })
 
 userSchema.pre('save', function (next) {

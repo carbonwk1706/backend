@@ -18,6 +18,7 @@ const booksRouter = require('./routes/books')
 const confirmPasswordRouter = require('./routes/confirmPassword')
 const checkRoles = require('./routes/checkRoles')
 const checkRequestRoles = require('./routes/checkRequestRoles')
+const wishList = require('./routes/wishlist')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -59,5 +60,7 @@ app.use('/books', booksRouter)
 app.use('/confirmPassword', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), confirmPasswordRouter)
 app.use('/checkRoles', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), checkRoles)
 app.use('/checkRequestRoles', checkRequestRoles)
+app.use('/confirmPassword', confirmPasswordRouter)
+app.use('/wishList', wishList)
 
 module.exports = app
