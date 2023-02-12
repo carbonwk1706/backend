@@ -24,12 +24,8 @@ const bookSchema = Schema({
   imageBook: {
     type: String,
     required: true
-  },
-  sales: Number,
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
   }
+
 })
 
 module.exports = mongoose.model('Book', bookSchema)
