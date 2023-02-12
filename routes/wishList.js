@@ -1,62 +1,53 @@
 const express = require('express')
-const User = require('../models/User')
-const Wish = require('../models/wish')
 const router = express.Router()
+const User = require('../models/User')
+const Book = require('../models/Book')
 
-const wishList = async function (req, res, next) {
-  const user = req.body.user
-  const wish = req.body.wish
+const addWishList = async function (req, res, next) {
+  const userId = req.body.id
+  const bookId = req.body.id
 
-  const newWish = new Wish({
-    user,
-    wish
-  })
-  try {
-    const findUser = await User.findById(newWish.user)
-    findUser.wishList.push(newWish)
-    await newWish.save()
-    await findUser.save()
+  const user = await User.findOne({ userId }).exec()
+  if (!user) return res.status(404).send('User not found.')
 
-    res.status(201).json({
-      findUser
-    })
-  } catch (err) {
-    res.status(500).send(err)
-  }
-}
+  const book = await Book.findOne({ bookId }).exec()
+  if (!book) return res.status(404).send('Book not found.')
 
-const getWishLists = async function (req, res, next) {
-  const userId = req.query.userId
-  try {
-    const wishLists = await Wish.find({ userId })
-    res.send({ wishLists })
-  } catch (error) {
-    res.status(500).send(error)
-  }
-}
-
-const deleteWish = async function (req, res, next) {
-  const wishId = req.params.id
-  try {
-    const user = await User.findOne({ wishList: { $elemMatch: { _id: wishId } } })
-    console.log('wish', wishId)
-    if (!user) {
-      return res.status(404).json({
-        message: 'Wish not found!!'
-      })
-    }
-    user.wishList.pull({ _id: wishId })
-    await user.save()
-
-    return res.status(200).send()
-  } catch (err) {
-    return res.status(404).send({
-      message: err.message
+  const duplicateBook = user.wishlist.find(item => item._id.toString() === book._id.toString())
+  if (duplicateBook) {
+    return res.status(200).send({
+      message: 'Book already exists in wishlist.'
     })
   }
+  user.wishlist.push(book)
+  await user.save()
+  res.send({ user })
 }
 
-router.get('/', getWishLists)
-router.delete('/:id', deleteWish)
-router.post('/', wishList)
+router.post('/remove-from-wishlist', async (req, res) => {
+  const user = await User.findById(req.user.id)
+  if (!user) return res.status(404).send('User not found.')
+
+  const bookIndex = user.wishlist.findIndex(b => b._id.toString() === req.body.bookId)
+  if (bookIndex === -1) return res.status(404).send('Book not found in wishlist.')
+
+  user.wishlist.splice(bookIndex, 1)
+  await user.save()
+
+  res.send('Book removed from wishlist.')
+})
+
+const getWishList = async function (req, res, next) {
+  User.findById(req.params.userId)
+    .populate('wishlist')
+    .exec((err, user) => {
+      if (err) return res.status(500).send(err)
+      if (!user) return res.status(404).send('User not found')
+
+      res.send(user.wishlist)
+    })
+}
+
+router.post('/addWishList', addWishList)
+router.get('/:userId', getWishList)
 module.exports = router
