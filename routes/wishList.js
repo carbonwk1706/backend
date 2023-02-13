@@ -62,5 +62,5 @@ const getWishList = async function (req, res, next) {
 
 router.get('/:userId', getWishList)
 router.post('/addWishList', addWishList)
-router.delete('/deleteWishList', deleteWishList)
+router.post('/deleteWishList', deleteWishList)
 module.exports = router
