@@ -60,7 +60,6 @@ app.use('/books', booksRouter)
 app.use('/confirmPassword', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), confirmPasswordRouter)
 app.use('/checkRoles', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), checkRoles)
 app.use('/checkRequestRoles', checkRequestRoles)
-app.use('/confirmPassword', confirmPasswordRouter)
-app.use('/wishList', wishList)
+app.use('/wishlist', wishList)
 
 module.exports = app

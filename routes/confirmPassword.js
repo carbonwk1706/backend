@@ -12,7 +12,7 @@ const confirmPassword = async function (req, res, next) {
     const verifyResult = await bcrypt.compare(password, user.password)
     if (!verifyResult) {
       return res.status(200).json({
-        message: 'Invalid username or password'
+        message: 'Invalid password'
       })
     }
     res.status(200).json({
