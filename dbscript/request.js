@@ -10,8 +10,8 @@ async function clearRequest () {
 async function main () {
   await clearRequest()
   const request = new Request({
-    user: '63db55de91565d18a5d4d677',
-    request: 'ROLE.[SELL]',
+    user: '63e984f7a31a219cb1c3e779',
+    request: 'คำร้องขอสมัครขายอีบุ๊ค',
     status: 'pending',
     publisher: 'กัปตัน',
     firstName: 'Wuttiwat',
@@ -27,7 +27,7 @@ async function main () {
     bankAccount: '1234569871',
     idAccount: '1234567895'
   })
-  const id = '63db55de91565d18a5d4d677'
+  const id = '63e984f7a31a219cb1c3e779'
   const user = await User.findById(id).exec()
   user.requestHistory.push(request)
   await request.save()
