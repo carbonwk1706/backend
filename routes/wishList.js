@@ -34,13 +34,12 @@ const deleteWishList = async function (req, res, next) {
     const user = await User.findById(userId).exec()
     if (!user) return res.status(404).send('User not found.')
     const book = await Book.findById(bookId).exec()
-    if (!user) return res.status(404).send('Book not found.')
+    if (!book) return res.status(404).send('Book not found.')
     const bookIndex = user.wishlist.findIndex(item => item._id.toString() === book._id.toString())
     if (bookIndex === -1) return res.status(404).send('Book not found in wishlist.')
     user.wishlist.splice(bookIndex, 1)
     await user.save()
     res.status(200).json({
-      data: user,
       message: 'Book removed from wishlist'
     })
   } catch (err) {
