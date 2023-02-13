@@ -4,24 +4,27 @@ const User = require('../models/User')
 const Book = require('../models/Book')
 
 const addWishList = async function (req, res, next) {
-  const userId = req.body.id
-  const bookId = req.body.id
-
-  const user = await User.findOne({ userId }).exec()
-  if (!user) return res.status(404).send('User not found.')
-
-  const book = await Book.findOne({ bookId }).exec()
-  if (!book) return res.status(404).send('Book not found.')
-
-  const duplicateBook = user.wishlist.find(item => item._id.toString() === book._id.toString())
-  if (duplicateBook) {
-    return res.status(200).send({
-      message: 'Book already exists in wishlist.'
+  const userId = req.body.userId
+  const bookId = req.body.bookId
+  try {
+    const user = await User.findById(userId).exec()
+    if (!user) return res.status(404).send('User not found.')
+    const book = await Book.findById(bookId).exec()
+    if (!book) return res.status(404).send('Book not found.')
+    const duplicateBook = user.wishlist.find(item => item._id.toString() === book._id.toString())
+    if (duplicateBook) {
+      return res.status(200).send({
+        message: 'Book already exists in wishlist.'
+      })
+    }
+    user.wishlist.push(book)
+    await user.save()
+    res.send({ user })
+  } catch (err) {
+    return res.status(500).json({
+      message: 'Internal server error'
     })
   }
-  user.wishlist.push(book)
-  await user.save()
-  res.send({ user })
 }
 
 router.post('/remove-from-wishlist', async (req, res) => {
