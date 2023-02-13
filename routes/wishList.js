@@ -14,7 +14,7 @@ const addWishList = async function (req, res, next) {
     const duplicateBook = user.wishlist.find(item => item._id.toString() === book._id.toString())
     if (duplicateBook) {
       return res.status(200).send({
-        message: 'Book already exists in wishlist.'
+        message: 'Book already exists in wishlist'
       })
     }
     user.wishlist.push(book)
