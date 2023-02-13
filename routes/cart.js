@@ -1,44 +1,41 @@
 const express = require('express')
 const router = express.Router()
 const Cart = require('../models/Cart')
-const User = require('../models/User')
 
-const getCartList = async function (req, res, next) {
-  try {
-    const carts = await Cart.find({}).exec()
-    res.status(200).json(carts)
-  } catch (err) {
-    return res.status(500).send({
-      message: err.message
+const getCart = async function (req, res, next) {
+  Cart.findOne({ user: req.params.userId })
+    .populate('items.product')
+    .exec((err, cart) => {
+      if (err) return res.status(500).send({ error: err.message })
+      res.json(cart)
     })
-  }
 }
 
-const cartList = async function (req, res, next) {
-  const user = req.body.user
-  const book = req.body.book
-
-  const newCartList = new Cart({
-    user,
-    book
+const addBook = async function (req, res, next) {
+  Cart.findOne({ user: req.params.userId }, (err, cart) => {
+    if (err) {
+      return res.status(500).json({ error: err.message })
+    }
+    if (!cart) {
+      cart = new Cart({ user: req.params.userId })
+    }
+    const itemIndex = cart.items.findIndex(item => item.product.toString() === req.params.bookId)
+    if (itemIndex > -1) {
+      res.status(200).send({
+        message: 'You have this product in your cart'
+      })
+    } else {
+      cart.items.push({ product: req.params.bookId, quantity: 1 })
+      cart.save((saveErr, updatedCart) => {
+        if (saveErr) {
+          return res.status(500).json({ error: saveErr.message })
+        }
+        res.json(updatedCart)
+      })
+    }
   })
-
-  try {
-    const findUser = await User.findById(newCartList.user)
-    findUser.cartHistory.push(newCartList)
-    await newCartList.save()
-    await findUser.save()
-
-    res.status(201).json({
-      findUser
-    })
-  } catch (err) {
-    return res.status(500).send({
-      message: err.message
-    })
-  }
 }
 
-router.get('/', getCartList)
-router.post('/', cartList)
+router.get('/:userId', getCart)
+router.post('/:userId/books/:bookId', addBook)
 module.exports = router
