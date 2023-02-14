@@ -36,6 +36,30 @@ const addBook = async function (req, res, next) {
   })
 }
 
+const removeBook = async function (req, res, next) {
+  Cart.findOne({ user: req.params.userId }, (err, cart) => {
+    if (err) {
+      return res.status(500).json({ error: err.message })
+    }
+    if (!cart) {
+      return res.status(404).json({ error: 'Cart not found' })
+    }
+
+    const itemIndex = cart.items.findIndex(item => item.product.toString() === req.params.bookId)
+    if (itemIndex > -1) {
+      cart.items.splice(itemIndex, 1)
+    }
+
+    cart.save((saveErr, updatedCart) => {
+      if (saveErr) {
+        return res.status(500).json({ error: saveErr.message })
+      }
+      res.json(updatedCart)
+    })
+  })
+}
+
 router.get('/:userId', getCart)
 router.post('/:userId/books/:bookId', addBook)
+router.delete('/:userId/books/:bookId', removeBook)
 module.exports = router
