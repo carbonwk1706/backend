@@ -29,6 +29,31 @@ const login = async function (req, res, next) {
   }
 }
 
+const loginAdmin = async function (req, res, next) {
+  const username = req.body.username
+  const password = req.body.password
+  try {
+    const user = await User.findOne({ username }).exec()
+    if (!user) {
+      return res.status(200).json({
+        message: 'Invalid username or password'
+      })
+    }
+    const verifyResult = await bcrypt.compare(password, user.password)
+    if (!verifyResult) {
+      return res.status(200).json({
+        message: 'Invalid username or password'
+      })
+    }
+    const token = generateAccessToken({ _id: user.id, username: user.username })
+    res.json({ user: { _id: user._id, name: user.name, username: user.username ,roles: user.roles}, token })
+  } catch (err) {
+    return res.status(500).json({
+      message: 'Internal server error'
+    })
+  }
+}
+
 const checkDuplicate = async function (req, res, next) {
   const username = req.body.username
   const email = req.body.email
@@ -77,6 +102,7 @@ const register = async function (req, res, next) {
 }
 
 router.post('/login', login)
+router.post('/loginadmin', loginAdmin)
 router.post('/duplicate', checkDuplicate)
 router.post('/register', register)
 module.exports = router

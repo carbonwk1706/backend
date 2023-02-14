@@ -20,6 +20,7 @@ const checkRoles = require('./routes/checkRoles')
 const checkRequestRoles = require('./routes/checkRequestRoles')
 const wishList = require('./routes/wishlist')
 const cart = require('./routes/cart')
+const checkDuplicateUser = require('./routes/checkDuplicateUser')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -63,5 +64,6 @@ app.use('/checkRoles', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.L
 app.use('/checkRequestRoles', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), checkRequestRoles)
 app.use('/wishlist', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), wishList)
 app.use('/cart', cart)
+app.use('/checkDuplicateUser',checkDuplicateUser)
 
 module.exports = app
