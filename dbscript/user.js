@@ -11,6 +11,8 @@ async function main () {
   await clearUser()
   const users = new User({ name: 'Wuttiwat Phoemsirikawinkun', username: 'wuttiwat', email: 'user@mail.com', coin: 500, gender: 'Male', password: 'password', roles: [ROLE.USER] })
   await users.save()
+  const users2 = new User({ name: 'Watchanat', username: 'carbon', email: 'user2@mail.com', coin: 500, gender: 'Male', password: 'password', roles: [ROLE.USER] })
+  await users2.save()
   const localAdmin = new User({ name: 'LocalAdmin', username: 'localadmin', password: 'password', email: 'localadmin@mail.com', gender: 'Female', roles: [ROLE.LOCAL_ADMIN, ROLE.USER] })
   await localAdmin.save()
   const admin = new User({ name: 'Admin', username: 'admin', password: 'password', email: 'admin@mail.com', gender: 'Female', roles: [ROLE.ADMIN, ROLE.USER] })
