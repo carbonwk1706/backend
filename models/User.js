@@ -54,7 +54,8 @@ const userSchema = Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Request'
   }],
-  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
+  wishlist: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
+  inventory: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
 })
 
 userSchema.pre('save', function (next) {
