@@ -45,7 +45,7 @@ const removeBook = async function (req, res, next) {
       return res.status(404).json({ error: 'Cart not found' })
     }
 
-    const itemIndex = cart.items.findIndex(item => item.product.toString() === req.params.bookId)
+    const itemIndex = cart.items.findIndex(item => item.product._id.toString() === req.params.bookId)
     if (itemIndex > -1) {
       cart.items.splice(itemIndex, 1)
     }
