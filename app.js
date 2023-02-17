@@ -28,6 +28,7 @@ const bestsellerRouter = require('./routes/bestseller')
 const newEntryRouter = require('./routes/newentry')
 const ratingRouter = require('./routes/rating')
 const receiptRouter = require('./routes/receipt')
+const ratingUserBooks = require('./routes/ratingUserBooks')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -79,5 +80,6 @@ app.use('/bestseller', bestsellerRouter)
 app.use('/newentry', newEntryRouter)
 app.use('/rating', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), ratingRouter)
 app.use('/receipt', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), receiptRouter)
+app.use('/ratingUserBooks', ratingUserBooks)
 
 module.exports = app
