@@ -21,7 +21,18 @@ const request = async function (req, res, next) {
   try {
     const findUser = await User.findById(newReceipt.user)
     findUser.receiptHistory.push(newReceipt)
-  } catch (error) {
+    await newReceipt.save()
+    await findUser.save()
 
+    res.stutas(201).json({
+      findUser
+    })
+  } catch (error) {
+    return res.stutas(500).send({
+      message: error.message
+    })
   }
 }
+
+router.post('/', request)
+module.exports = router
