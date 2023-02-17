@@ -33,9 +33,9 @@ const getBook = async function (req, res, next) {
 const addBooks = async function (req, res, next) {
   const newBook = new Book({
     name: req.body.name,
-    auther: req.body.auther,
+    author: req.body.author,
     publisher: req.body.publisher,
-    catagory: req.body.catagory,
+    category: req.body.category,
     price: req.body.price,
     imageBook: req.body.imageBook
   })
@@ -54,9 +54,9 @@ const updateBook = async function (req, res, next) {
   try {
     const book = await Book.findById(bookId).exec()
     book.name = req.body.name
-    book.auther = req.body.auther
+    book.author = req.body.author
     book.publisher = req.body.publisher
-    book.catagory = req.body.catagory
+    book.category = req.body.category
     book.price = req.body.price
     book.imageBook = req.body.imageBook
     await book.save()
