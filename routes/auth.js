@@ -46,7 +46,7 @@ const loginadmin = async function (req, res, next) {
       })
     }
     const token = generateAccessToken({ _id: user.id, username: user.username })
-    res.json({ user: { _id: user._id, name: user.name, username: user.username , roles:user.roles}, token })
+    res.json({ user: { _id: user._id, name: user.name, username: user.username, roles: user.roles }, token })
   } catch (err) {
     return res.status(500).json({
       message: 'Internal server error'
