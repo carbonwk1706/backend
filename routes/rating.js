@@ -31,13 +31,8 @@ const rateBook = async (req, res, next) => {
   user.ratings.push({ book: bookId, rating })
   await user.save()
 
-  if (!book.ratingsCount) {
-    book.ratingsCount = 1
-    book.rating = rating
-  } else {
-    book.ratingsCount++
-    book.rating = (book.rating + rating) / book.ratingsCount
-  }
+  book.ratingsCount = book.ratingsCount ? book.ratingsCount + 1 : 1
+  book.rating = (book.rating * (book.ratingsCount - 1) + rating) / book.ratingsCount
   await book.save()
 
   res.status(200).send({
