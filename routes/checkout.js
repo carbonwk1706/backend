@@ -15,6 +15,16 @@ const checkout = async function (req, res, next) {
   for (let i = 0; i < selectedItems.length; i++) {
     const book = await Book.findById(selectedItems[i].product)
     totalCost += book.price * selectedItems[i].quantity
+  }
+
+  if (user.coin < totalCost) {
+    return res.status(201).send({
+      message: 'not enough money'
+    })
+  }
+
+  for (let i = 0; i < selectedItems.length; i++) {
+    const book = await Book.findById(selectedItems[i].product)
 
     const bestseller = await Bestseller.findOne({ product: book._id })
     if (!bestseller) {
@@ -23,12 +33,6 @@ const checkout = async function (req, res, next) {
       bestseller.count += selectedItems[i].quantity
       await bestseller.save()
     }
-  }
-
-  if (user.coin < totalCost) {
-    return res.status(201).send({
-      message: 'not enough money'
-    })
   }
 
   const updateUser = await User.findByIdAndUpdate(userId, {
