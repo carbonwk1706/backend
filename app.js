@@ -25,6 +25,8 @@ const inventory = require('./routes/inventoryUser')
 const checkBook = require('./routes/checkHaveBook')
 const checkDuplicateUser = require('./routes/checkDuplicateUser')
 const bestsellerRouter = require('./routes/bestseller')
+const newEntryRouter = require('./routes/newentry')
+const ratingRouter = require('./routes/rating')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -73,5 +75,7 @@ app.use('/inventory', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LO
 app.use('/checkBook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), checkBook)
 app.use('/checkDuplicateUser', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), checkDuplicateUser)
 app.use('/bestseller', bestsellerRouter)
+app.use('/newentry', newEntryRouter)
+app.use('/rating', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), ratingRouter)
 
 module.exports = app

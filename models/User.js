@@ -59,7 +59,11 @@ const userSchema = Schema({
     ref: 'Receipt'
   }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
-  inventory: [{ type: Schema.Types.ObjectId, ref: 'Book' }]
+  inventory: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
+  ratings: [{
+    book: { type: Schema.Types.ObjectId, ref: 'Book' },
+    rating: Number
+  }]
 })
 
 userSchema.pre('save', function (next) {
