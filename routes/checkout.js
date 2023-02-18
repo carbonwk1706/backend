@@ -37,7 +37,15 @@ const checkout = async function (req, res, next) {
 
   const updateUser = await User.findByIdAndUpdate(userId, {
     $inc: { coin: -totalCost },
-    $push: { inventory: { $each: selectedItems.map(item => item.product) } }
+    $push: {
+      inventory: { $each: selectedItems.map(item => item.product) },
+      receiptBooks: [{
+        books: selectedItems.map(item => item.product),
+        totalCost,
+        count: selectedItems.length,
+        createdAt: new Date()
+      }]
+    }
   }, { new: true })
 
   const cart = await Cart.findOne({ user: userId })
