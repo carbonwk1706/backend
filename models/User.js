@@ -54,9 +54,11 @@ const userSchema = Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Request'
   }],
-  receiptHistory: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Receipt'
+  receiptBooks: [{
+    books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
+    totalCost: Number,
+    count: Number,
+    createdAt: { type: Date, default: Date.now }
   }],
   wishlist: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
   inventory: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
