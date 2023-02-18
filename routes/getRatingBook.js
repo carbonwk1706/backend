@@ -11,26 +11,20 @@ const getReviews = async (req, res) => {
     return res.status(404).send({ message: 'Book not found' })
   }
 
-  const reviews = book.reviews
+  const reviewPromises = book.reviews.map(async review => {
+    const user = await User.findById(review.user)
+    return {
+      rating: review.rating,
+      comment: review.comment,
+      name: user.name,
+      imageUrl: user.imageUrl,
+      createAt: review.createdAt
+    }
+  })
+
+  const reviews = await Promise.all(reviewPromises)
   res.status(200).send(reviews)
 }
 
-const getUser = async function (req, res, next) {
-  const userId = req.params.id
-  try {
-    const user = await User.findById(userId).exec()
-    if (user === null) {
-      return res.status(404).json({
-        message: 'User not found!!'
-      })
-    }
-    res.json({ user: { imageUrl: user.imageUrl, name: user.name } })
-  } catch (err) {
-    return res.status(404).send({
-      message: err.message
-    })
-  }
-}
 router.get('/:id', getReviews)
-router.get('/getUser/:id', getUser)
 module.exports = router
