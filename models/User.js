@@ -62,7 +62,8 @@ const userSchema = Schema({
   inventory: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
   ratings: [{
     book: { type: Schema.Types.ObjectId, ref: 'Book' },
-    rating: Number
+    rating: Number,
+    comment: String
   }]
 })
 

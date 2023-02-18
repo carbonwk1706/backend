@@ -7,6 +7,7 @@ const rateBook = async (req, res, next) => {
   const userId = req.body.userId
   const bookId = req.body.bookId
   const rating = req.body.rating
+  const comment = req.body.comment
 
   const user = await User.findById(userId)
   if (!user) {
@@ -28,15 +29,18 @@ const rateBook = async (req, res, next) => {
     })
   }
 
-  user.ratings.push({ book: bookId, rating })
+  user.ratings.push({ book: bookId, rating, comment })
   await user.save()
+
+  book.reviews.push({ user: userId, rating, comment })
+  await book.save()
 
   book.ratingsCount = book.ratingsCount ? book.ratingsCount + 1 : 1
   book.rating = (book.rating * (book.ratingsCount - 1) + rating) / book.ratingsCount
   await book.save()
 
   res.status(200).send({
-    message: 'Book rating updated'
+    message: 'Book rating and comment updated'
   })
 }
 

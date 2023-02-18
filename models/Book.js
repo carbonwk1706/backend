@@ -36,7 +36,15 @@ const bookSchema = Schema({
   ratingsCount: {
     type: Number,
     default: 0
-  }
+  },
+  reviews: [
+    {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      rating: { type: Number },
+      comment: { type: String },
+      createdAt: { type: Date, default: Date.now }
+    }
+  ]
 
 })
 
