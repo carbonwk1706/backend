@@ -3,7 +3,6 @@ const router = express.Router()
 const Cart = require('../models/Cart')
 const User = require('../models/User')
 const Book = require('../models/Book')
-const Bestseller = require('../models/Bestseller')
 
 const checkout = async function (req, res, next) {
   const userId = req.body.userId
@@ -26,13 +25,8 @@ const checkout = async function (req, res, next) {
   for (let i = 0; i < selectedItems.length; i++) {
     const book = await Book.findById(selectedItems[i].product)
 
-    const bestseller = await Bestseller.findOne({ product: book._id })
-    if (!bestseller) {
-      await Bestseller.create({ product: book._id, count: selectedItems[i].quantity })
-    } else {
-      bestseller.count += selectedItems[i].quantity
-      await bestseller.save()
-    }
+    book.sold += selectedItems[i].quantity
+    await book.save()
   }
 
   const updateUser = await User.findByIdAndUpdate(userId, {
