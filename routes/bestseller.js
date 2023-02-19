@@ -7,5 +7,19 @@ const bestseller = async function (req, res, next) {
   res.json(books)
 }
 
+const bestsellerCartoon = async function (req, res, next) {
+  const category = 'การ์ตูนทั่วไป'
+  const bestsellers = await Book.find({ category }).sort({ sold: -1 })
+  res.json(bestsellers)
+}
+
+const bestsellerNovel = async function (req, res, next) {
+  const category = 'นิยาย'
+  const bestsellers = await Book.find({ category }).sort({ sold: -1 })
+  res.json(bestsellers)
+}
+
 router.get('/', bestseller)
+router.get('/category/cartoon', bestsellerCartoon)
+router.get('/category/novel', bestsellerNovel)
 module.exports = router
