@@ -17,6 +17,7 @@ const request = async function (req, res, next) {
     amount,
     method
   })
+  console.log(newReceipt)
 
   try {
     const findUser = await User.findById(newReceipt.user)
@@ -24,11 +25,11 @@ const request = async function (req, res, next) {
     await newReceipt.save()
     await findUser.save()
 
-    res.stutas(201).json({
+    res.status(201).json({
       findUser
     })
   } catch (error) {
-    return res.stutas(500).send({
+    return res.status(500).send({
       message: error.message
     })
   }
