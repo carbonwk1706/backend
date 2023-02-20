@@ -16,26 +16,50 @@ const searchBook = async function (req, res, next) {
   const books = await Book.find(searchQuery)
   res.send(books)
 }
-const searchInventory = async function (req, res, next) {
+const searchInventoryBookName = async function (req, res, next) {
   const { searchTerm } = req.query
-  console.log(typeof searchTerm)
 
   const searchQuery = {
     name: new RegExp(searchTerm, 'i')
   }
 
   const userId = req.query.userId
-  console.log('userId:', userId)
-
   const user = await User.findById(userId).populate('inventory')
-  console.log('user:', user)
-
   const books = user.inventory.filter(book => new RegExp(searchQuery.name, 'i').test(book.name))
-  console.log('books:', books)
+
+  res.send(books)
+}
+
+const searchInventoryBookAuthor = async function (req, res, next) {
+  const { searchTerm } = req.query
+
+  const searchQuery = {
+    name: new RegExp(searchTerm, 'i')
+  }
+
+  const userId = req.query.userId
+  const user = await User.findById(userId).populate('inventory')
+  const books = user.inventory.filter(book => new RegExp(searchQuery.name, 'i').test(book.author))
+
+  res.send(books)
+}
+
+const searchInventoryBookPublisher = async function (req, res, next) {
+  const { searchTerm } = req.query
+
+  const searchQuery = {
+    name: new RegExp(searchTerm, 'i')
+  }
+
+  const userId = req.query.userId
+  const user = await User.findById(userId).populate('inventory')
+  const books = user.inventory.filter(book => new RegExp(searchQuery.name, 'i').test(book.publisher))
 
   res.send(books)
 }
 
 router.get('/', searchBook)
-router.get('/inventory', searchInventory)
+router.get('/inventory/name', searchInventoryBookName)
+router.get('/inventory/author', searchInventoryBookAuthor)
+router.get('/inventory/publisher', searchInventoryBookPublisher)
 module.exports = router
