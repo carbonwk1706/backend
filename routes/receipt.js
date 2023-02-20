@@ -17,7 +17,6 @@ const request = async function (req, res, next) {
     amount,
     method
   })
-  console.log(newReceipt)
 
   try {
     const findUser = await User.findById(newReceipt.user)
