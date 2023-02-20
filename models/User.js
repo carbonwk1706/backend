@@ -66,6 +66,10 @@ const userSchema = Schema({
     book: { type: Schema.Types.ObjectId, ref: 'Book' },
     rating: Number,
     comment: String
+  }],
+  receiptHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Receipt'
   }]
 })
 
