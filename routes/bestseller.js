@@ -20,6 +20,6 @@ const bestsellerNovel = async function (req, res, next) {
 }
 
 router.get('/', bestseller)
-router.get('/category/cartoon', bestsellerCartoon)
-router.get('/category/novel', bestsellerNovel)
+router.get('/cartoon', bestsellerCartoon)
+router.get('/novel', bestsellerNovel)
 module.exports = router
