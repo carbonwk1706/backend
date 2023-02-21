@@ -13,6 +13,41 @@ const getBooks = async function (req, res, next) {
   }
 }
 
+const getAllBooks = async function (req, res, next) {
+  try {
+    const books = await Book.find({}).sort({ createdAt: -1 }).exec()
+    res.status(200).json(books)
+  } catch (err) {
+    return res.status(500).send({
+      message: err.message
+    })
+  }
+}
+
+const getBooksCartoon = async function (req, res, next) {
+  try {
+    const category = 'การ์ตูนทั่วไป'
+    const books = await Book.find({ category }).sort({ createdAt: -1 }).exec()
+    res.status(200).json(books)
+  } catch (err) {
+    return res.status(500).send({
+      message: err.message
+    })
+  }
+}
+
+const getBooksNovel = async function (req, res, next) {
+  try {
+    const category = 'นิยาย'
+    const books = await Book.find({ category }).sort({ createdAt: -1 }).exec()
+    res.status(200).json(books)
+  } catch (err) {
+    return res.status(500).send({
+      message: err.message
+    })
+  }
+}
+
 const getBook = async function (req, res, next) {
   const bookId = req.params.id
   try {
@@ -85,6 +120,9 @@ const deleteBook = async function (req, res, next) {
 }
 
 router.get('/', getBooks)
+router.get('/all', getAllBooks)
+router.get('/cartoon', getBooksCartoon)
+router.get('/novel', getBooksNovel)
 router.get('/:id', getBook)
 router.post('/', addBooks)
 router.put('/:id', updateBook)
