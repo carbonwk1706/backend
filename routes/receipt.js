@@ -34,5 +34,21 @@ const request = async function (req, res, next) {
   }
 }
 
+const getReceipt = async function (req, res, next) {
+  const userId = req.params.userId
+
+  try {
+    const user = await User.findById(userId).populate('receiptHistory')
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.status(200).json(user.receiptHistory)
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
 router.post('/', request)
+router.get('/:userId', getReceipt)
 module.exports = router
