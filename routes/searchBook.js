@@ -16,6 +16,37 @@ const searchBook = async function (req, res, next) {
   const books = await Book.find(searchQuery)
   res.send(books)
 }
+
+const searchBookName = async function (req, res, next) {
+  const { searchTerm } = req.query
+  const searchQuery = {
+    name: new RegExp(searchTerm, 'i')
+  }
+
+  const books = await Book.find(searchQuery)
+  res.send(books)
+}
+
+const searchBookAuthor = async function (req, res, next) {
+  const { searchTerm } = req.query
+  const searchQuery = {
+    author: new RegExp(searchTerm, 'i')
+  }
+
+  const books = await Book.find(searchQuery)
+  res.send(books)
+}
+
+const searchBookPublisher = async function (req, res, next) {
+  const { searchTerm } = req.query
+  const searchQuery = {
+    publisher: new RegExp(searchTerm, 'i')
+  }
+
+  const books = await Book.find(searchQuery)
+  res.send(books)
+}
+
 const searchInventoryBookName = async function (req, res, next) {
   const { searchTerm } = req.query
 
@@ -59,6 +90,9 @@ const searchInventoryBookPublisher = async function (req, res, next) {
 }
 
 router.get('/', searchBook)
+router.get('/name', searchBookName)
+router.get('/author', searchBookAuthor)
+router.get('/publisher', searchBookPublisher)
 router.get('/inventory/name', searchInventoryBookName)
 router.get('/inventory/author', searchInventoryBookAuthor)
 router.get('/inventory/publisher', searchInventoryBookPublisher)
