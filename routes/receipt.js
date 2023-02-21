@@ -45,10 +45,21 @@ const getReceipt = async function (req, res, next) {
 
     res.status(200).json(user.receiptHistory)
   } catch (error) {
-    return res.status(500).json({ message: error.message })
+    return res.status(500).send({
+      message: error.message
+    })
   }
+}
+
+const receiptDetail = async function (req, res) {
+  const receiptId = req.params.receiptId
+  const userId = req.params.userId
+  const user = await User.findById(userId).populate('receiptHistory')
+  const receiptHistory = user.receiptHistory.find(receiptHistory => receiptHistory._id.toString() === receiptId)
+  res.send(receiptHistory)
 }
 
 router.post('/', request)
 router.get('/:userId', getReceipt)
+router.get('/:receipt/:userId', receiptDetail)
 module.exports = router
