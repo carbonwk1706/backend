@@ -34,6 +34,7 @@ const halloffameRouter = require('./routes/halloffame')
 const getRatingBookRouter = require('./routes/getRatingBook')
 const searchBookRouter = require('./routes/searchBook')
 const receiptBookRouter = require('./routes/receiptBooks')
+const AllReviewRouter = require('./routes/allReviewBooks')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -91,5 +92,6 @@ app.use('/halloffame', halloffameRouter)
 app.use('/ratingBook', getRatingBookRouter)
 app.use('/searchbook', searchBookRouter)
 app.use('/receiptbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), receiptBookRouter)
+app.use('/allreview', AllReviewRouter)
 
 module.exports = app
