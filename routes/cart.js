@@ -7,7 +7,16 @@ const getCart = async function (req, res, next) {
     .populate('items.product')
     .exec((err, cart) => {
       if (err) return res.status(500).send({ error: err.message })
-      res.json(cart)
+
+      const itemIndex = cart.items.findIndex(item => item.product._id.toString() === req.params.productId)
+      if (itemIndex >= 0) {
+        cart.items.splice(itemIndex, 1)
+      }
+
+      cart.save((err, updatedCart) => {
+        if (err) return res.status(500).send({ error: err.message })
+        res.json(updatedCart)
+      })
     })
 }
 
