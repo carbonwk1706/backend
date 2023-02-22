@@ -4,9 +4,16 @@ const Cart = require('../models/Cart')
 
 const getCart = async function (req, res, next) {
   Cart.findOne({ user: req.params.userId })
-    .populate('items.product')
-    .exec((err, cart) => {
+    .populate({
+      path: 'items.product',
+      model: 'Book',
+      select: '_id title price',
+      match: { isActive: true }
+    })
+    .exec(async (err, cart) => {
       if (err) return res.status(500).send({ error: err.message })
+      cart.items = cart.items.filter(item => item.product !== null)
+      await cart.save()
       res.json(cart)
     })
 }
