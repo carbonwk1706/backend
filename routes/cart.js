@@ -1,22 +1,30 @@
 const express = require('express')
 const router = express.Router()
 const Cart = require('../models/Cart')
+const Book = require('../models/Book')
 
 const getCart = async function (req, res, next) {
   Cart.findOne({ user: req.params.userId })
     .populate('items.product')
-    .exec((err, cart) => {
+    .exec(async (err, cart) => {
       if (err) return res.status(500).send({ error: err.message })
 
-      const itemIndex = cart.items.findIndex(item => item.product._id.toString() === req.params.productId)
-      if (itemIndex >= 0) {
-        cart.items.splice(itemIndex, 1)
+      if (cart) {
+        const items = cart.items
+
+        for (let i = 0; i < items.length; i++) {
+          const book = await Book.findOne({ _id: items[i].product })
+          if (!book) {
+            items.splice(i, 1)
+            i--
+          }
+        }
+
+        cart.items = items
+        await cart.save()
       }
 
-      cart.save((err, updatedCart) => {
-        if (err) return res.status(500).send({ error: err.message })
-        res.json(updatedCart)
-      })
+      res.json(cart)
     })
 }
 
