@@ -61,5 +61,5 @@ const receiptDetail = async function (req, res) {
 
 router.post('/', request)
 router.get('/:userId', getReceipt)
-router.get('/:receipt/:userId', receiptDetail)
+router.get('/:receiptId/:userId', receiptDetail)
 module.exports = router
