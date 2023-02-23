@@ -75,10 +75,13 @@ const getRequest = async function (req, res, next) {
 
 const approveRequest = async function (req, res, next) {
   const id = req.params.id
+  const adminId = req.body.adminId
   try {
     const request = await Request.findById(id)
     if (!request) return res.status(404).send('Request not found')
     request.status = 'approved'
+    request.approvedBy = adminId
+    request.approvedAt = Date.now()
     await request.save()
     const user = await User.findById(request.user)
     user.roles.push('SELL')
@@ -104,10 +107,13 @@ const approveRequest = async function (req, res, next) {
 
 const rejectRequest = async function (req, res, next) {
   const id = req.params.id
+  const adminId = req.body.adminId
   try {
     const request = await Request.findById(id)
     if (!request) return res.status(404).send('Request not found')
     request.status = 'rejected'
+    request.rejectedBy = adminId
+    request.rejectedAt = Date.now()
     await request.save()
     res.send({ request })
   } catch (error) {

@@ -14,6 +14,10 @@ const RequestSchema = Schema({
     type: Date,
     default: Date.now
   },
+  approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  approvedAt: { type: Date },
+  rejectedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  rejectedAt: { type: Date },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
