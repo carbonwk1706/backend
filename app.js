@@ -36,6 +36,7 @@ const searchBookRouter = require('./routes/searchBook')
 const receiptBookRouter = require('./routes/receiptBooks')
 const AllReviewRouter = require('./routes/allReviewBooks')
 const requestCoinRouter = require('./routes/requsetCoin')
+const checkDuplicateBook = require('./routes/checkDuplicateBook')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -95,5 +96,5 @@ app.use('/searchbook', searchBookRouter)
 app.use('/receiptbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), receiptBookRouter)
 app.use('/allreview', AllReviewRouter)
 app.use('/requestcoin', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), requestCoinRouter)
-
+app.use('/checkDuplicateBook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), checkDuplicateBook)
 module.exports = app
