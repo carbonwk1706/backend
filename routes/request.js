@@ -99,7 +99,10 @@ const approveRequest = async function (req, res, next) {
     user.bankAccount = request.bankAccount
     user.idAccount = request.idAccount
     await user.save()
-    res.send({ request, user })
+    const admin = await User.findById(adminId)
+    admin.processedRequests.push(request._id)
+    await admin.save()
+    res.send({ request, user, admin })
   } catch (error) {
 
   }
@@ -115,7 +118,10 @@ const rejectRequest = async function (req, res, next) {
     request.rejectedBy = adminId
     request.rejectedAt = Date.now()
     await request.save()
-    res.send({ request })
+    const admin = await User.findById(adminId)
+    admin.processedRequests.push(request._id)
+    await admin.save()
+    res.send({ request, admin })
   } catch (error) {
     res.status(500).send(error)
   }

@@ -36,6 +36,7 @@ const searchBookRouter = require('./routes/searchBook')
 const receiptBookRouter = require('./routes/receiptBooks')
 const AllReviewRouter = require('./routes/allReviewBooks')
 const requestCoinRouter = require('./routes/requsetCoin')
+const requestHistoryAdmin = require('./routes/requestHistoryAdmin')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -95,5 +96,6 @@ app.use('/searchbook', searchBookRouter)
 app.use('/receiptbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), receiptBookRouter)
 app.use('/allreview', AllReviewRouter)
 app.use('/requestcoin', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), requestCoinRouter)
+app.use('/history', requestHistoryAdmin)
 
 module.exports = app
