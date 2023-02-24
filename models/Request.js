@@ -18,7 +18,8 @@ const RequestSchema = Schema({
   approvedAt: { type: Date },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   publisher: {
     type: String,

@@ -44,6 +44,9 @@ const getProcessedData = async function (req, res, next) {
       _id: { $in: user.processedReceipts }
     })
     const combinedData = processedRequests.concat(processedReceipts)
+    combinedData.sort((a, b) => {
+      return new Date(b.approvedAt) - new Date(a.approvedAt)
+    })
     res.send({ combinedData })
   } catch (error) {
     res.status(500).send(error)
