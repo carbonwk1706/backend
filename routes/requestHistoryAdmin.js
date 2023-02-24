@@ -11,7 +11,7 @@ const getProcessedRequests = async function (req, res, next) {
     if (!user) return res.status(404).send('User not found')
     const processedRequests = await Request.find({
       _id: { $in: user.processedRequests }
-    })
+    }).sort({ approvedAt: -1 })
     res.send({ processedRequests })
   } catch (error) {
 
@@ -25,7 +25,7 @@ const getProcessedReceipts = async function (req, res, next) {
     if (!user) return res.status(404).send('User not found')
     const processedReceipts = await Receipt.find({
       _id: { $in: user.processedReceipts }
-    })
+    }).sort({ approvedAt: -1 })
     res.send({ processedReceipts })
   } catch (error) {
 
