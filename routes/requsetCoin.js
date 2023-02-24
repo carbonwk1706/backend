@@ -51,8 +51,8 @@ const rejectRequest = async function (req, res, next) {
     const request = await Receipt.findById(id)
     if (!request) return res.status(404).send('Request not found')
     request.status = 'rejected'
-    request.rejectedBy = adminId
-    request.rejectedAt = Date.now()
+    request.approvedBy = adminId
+    request.approvedAt = Date.now()
     await request.save()
     const admin = await User.findById(adminId)
     admin.processedReceipts.push(request._id)
