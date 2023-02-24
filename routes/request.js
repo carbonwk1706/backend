@@ -75,10 +75,13 @@ const getRequest = async function (req, res, next) {
 
 const approveRequest = async function (req, res, next) {
   const id = req.params.id
+  const adminId = req.body.adminId
   try {
     const request = await Request.findById(id)
     if (!request) return res.status(404).send('Request not found')
     request.status = 'approved'
+    request.approvedBy = adminId
+    request.approvedAt = Date.now()
     await request.save()
     const user = await User.findById(request.user)
     user.roles.push('SELL')
@@ -96,7 +99,10 @@ const approveRequest = async function (req, res, next) {
     user.bankAccount = request.bankAccount
     user.idAccount = request.idAccount
     await user.save()
-    res.send({ request, user })
+    const admin = await User.findById(adminId)
+    admin.processedRequests.push(request._id)
+    await admin.save()
+    res.send({ request, user, admin })
   } catch (error) {
 
   }
@@ -104,12 +110,18 @@ const approveRequest = async function (req, res, next) {
 
 const rejectRequest = async function (req, res, next) {
   const id = req.params.id
+  const adminId = req.body.adminId
   try {
     const request = await Request.findById(id)
     if (!request) return res.status(404).send('Request not found')
     request.status = 'rejected'
+    request.approvedBy = adminId
+    request.approvedAt = Date.now()
     await request.save()
-    res.send({ request })
+    const admin = await User.findById(adminId)
+    admin.processedRequests.push(request._id)
+    await admin.save()
+    res.send({ request, admin })
   } catch (error) {
     res.status(500).send(error)
   }

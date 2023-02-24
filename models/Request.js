@@ -14,6 +14,8 @@ const RequestSchema = Schema({
     type: Date,
     default: Date.now
   },
+  approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  approvedAt: { type: Date },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

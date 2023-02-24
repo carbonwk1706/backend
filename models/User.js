@@ -67,6 +67,8 @@ const userSchema = Schema({
     rating: Number,
     comment: String
   }],
+  processedReceipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Receipt' }],
+  processedRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Request' }],
   receiptHistory: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Receipt'

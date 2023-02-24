@@ -35,7 +35,10 @@ const approveRequest = async function (req, res, next) {
     const user = await User.findById(request.user)
     user.coin += request.amount
     await user.save()
-    res.send({ request, user })
+    const admin = await User.findById(adminId)
+    admin.processedReceipts.push(request._id)
+    await admin.save()
+    res.send({ request, user, admin })
   } catch (error) {
 
   }
@@ -48,10 +51,13 @@ const rejectRequest = async function (req, res, next) {
     const request = await Receipt.findById(id)
     if (!request) return res.status(404).send('Request not found')
     request.status = 'rejected'
-    request.rejectedBy = adminId
-    request.rejectedAt = Date.now()
+    request.approvedBy = adminId
+    request.approvedAt = Date.now()
     await request.save()
-    res.send({ request })
+    const admin = await User.findById(adminId)
+    admin.processedReceipts.push(request._id)
+    await admin.save()
+    res.send({ request, admin })
   } catch (error) {
     res.status(500).send(error)
   }
