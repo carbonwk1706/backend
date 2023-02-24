@@ -16,8 +16,6 @@ const ReceiptSchema = Schema({
   },
   approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   approvedAt: { type: Date },
-  rejectedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  rejectedAt: { type: Date },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
