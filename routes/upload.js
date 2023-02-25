@@ -30,14 +30,14 @@ router.post('/', upload.single('image'), async (req, res) => {
   }
 })
 
-router.post('/slip', upload.single('image'), async (req, res) => {
+router.post('/slip/:id', upload.single('image'), async (req, res) => {
   const host = req.headers.host
   const protocol = req.protocol
 
   const imageSlip = `${protocol}://${host}/uploads/${req.file.filename}`
 
   try {
-    const receipt = await Receipt.findOneAndUpdate({ username: req.body.username }, { $set: { imageSlip } }, { new: true })
+    const receipt = await Receipt.findByIdAndUpdate(req.params.id, { $set: { imageSlip } }, { new: true })
     res.json(receipt)
   } catch (error) {
     res.status(500).send(error)
