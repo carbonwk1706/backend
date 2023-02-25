@@ -38,9 +38,10 @@ const approveRequest = async function (req, res, next) {
     const admin = await User.findById(adminId)
     admin.processedReceipts.push(request._id)
     await admin.save()
+    req.app.get('io').emit('receipt-approved', { request, user, admin })
     res.send({ request, user, admin })
   } catch (error) {
-
+    res.status(500).send(error)
   }
 }
 
@@ -57,9 +58,21 @@ const rejectRequest = async function (req, res, next) {
     const admin = await User.findById(adminId)
     admin.processedReceipts.push(request._id)
     await admin.save()
+    const user = await User.findById(request.user)
+    const notification = JSON.stringify({
+      type: 'เรื่อง แจ้งชำระการเติม Coin',
+      message: 'การแจ้งชำระการขอเติม Coin ของคุณถูกปฏิเสธ',
+      createdAt: new Date()
+    })
+    user.notifications.push(notification)
+    await user.save()
+    req.app.get('io').emit('receipt-rejected', { request, admin })
     res.send({ request, admin })
   } catch (error) {
-    res.status(500).send(error)
+    res.status(500).send({
+      message: error
+    })
+    console.log(error)
   }
 }
 
