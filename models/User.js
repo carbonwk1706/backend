@@ -50,6 +50,11 @@ const userSchema = Schema({
     type: [String],
     default: [ROLE.USER]
   },
+  notifications: [{
+    type: String,
+    message: String,
+    createdAt: { type: Date, default: Date.now }
+  }],
   requestHistory: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Request'

@@ -39,6 +39,7 @@ const requestCoinRouter = require('./routes/requsetCoin')
 const requestHistoryAdmin = require('./routes/requestHistoryAdmin')
 const checkDuplicateBook = require('./routes/checkDuplicateBook')
 const allRequestRouter = require('./routes/allRequest')
+const notificationsRouter = require('./routes/notifications')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -101,4 +102,5 @@ app.use('/requestcoin', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.
 app.use('/history', requestHistoryAdmin)
 app.use('/checkDuplicateBook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), checkDuplicateBook)
 app.use('/allrequest', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), allRequestRouter)
+app.use('/notifications', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), notificationsRouter)
 module.exports = app
