@@ -45,7 +45,7 @@ const request = async function (req, res, next) {
     await findUser.save()
 
     res.status(201).json({
-      findUser
+      findUser, newRequest
     })
   } catch (err) {
     return res.status(500).send({

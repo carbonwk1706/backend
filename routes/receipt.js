@@ -29,7 +29,7 @@ const request = async function (req, res, next) {
     await findUser.save()
 
     res.status(201).json({
-      findUser
+      findUser, newReceipt
     })
   } catch (error) {
     return res.status(500).send({
