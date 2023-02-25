@@ -2,6 +2,7 @@ const express = require('express')
 const multer = require('multer')
 const router = express.Router()
 const User = require('../models/User')
+const Receipt = require('../models/Receipt')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -24,6 +25,20 @@ router.post('/', upload.single('image'), async (req, res) => {
   try {
     const user = await User.findOneAndUpdate({ username: req.body.username }, { $set: { imageUrl } }, { new: true })
     res.json(user)
+  } catch (error) {
+    res.status(500).send(error)
+  }
+})
+
+router.post('/slip', upload.single('image'), async (req, res) => {
+  const host = req.headers.host
+  const protocol = req.protocol
+
+  const imageSlip = `${protocol}://${host}/uploads/${req.file.filename}`
+
+  try {
+    const receipt = await Receipt.findOneAndUpdate({ username: req.body.username }, { $set: { imageSlip } }, { new: true })
+    res.json(receipt)
   } catch (error) {
     res.status(500).send(error)
   }

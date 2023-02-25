@@ -5,6 +5,17 @@ const ReceiptSchema = Schema({
     type: String,
     required: true
   },
+  imageSlip: {
+    type: String
+  },
+  slipDate: {
+    type: String,
+    require: true
+  },
+  slipTime: {
+    type: String,
+    require: true
+  },
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],

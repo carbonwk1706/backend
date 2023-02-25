@@ -5,6 +5,8 @@ const User = require('../models/User')
 
 const request = async function (req, res, next) {
   const request = req.body.request
+  const slipDate = req.body.slipDate
+  const slipTime = req.body.slipTime
   const user = req.body.user
   const username = req.body.username
   const amount = req.body.amount
@@ -12,6 +14,8 @@ const request = async function (req, res, next) {
 
   const newReceipt = new Receipt({
     request,
+    slipDate,
+    slipTime,
     user,
     username,
     amount,
