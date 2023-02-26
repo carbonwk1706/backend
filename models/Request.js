@@ -10,6 +10,12 @@ const RequestSchema = Schema({
     enum: ['pending', 'approved', 'rejected'],
     default: 'pending'
   },
+  imageIDCard: {
+    type: String
+  },
+  imageBankAccount: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now
