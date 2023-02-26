@@ -44,6 +44,7 @@ const request = async function (req, res, next) {
     await newRequest.save()
     await findUser.save()
 
+    req.app.get('io').emit('new-request', { findUser, newRequest })
     res.status(201).json({
       findUser, newRequest
     })

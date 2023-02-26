@@ -39,6 +39,7 @@ const rateBook = async (req, res, next) => {
   book.rating = (book.rating * (book.ratingsCount - 1) + rating) / book.ratingsCount
   await book.save()
 
+  req.app.get('io').emit('new-rating')
   res.status(200).send({
     message: 'Book rating and comment updated'
   })

@@ -28,6 +28,7 @@ const request = async function (req, res, next) {
     await newReceipt.save()
     await findUser.save()
 
+    req.app.get('io').emit('new-receipt', { findUser, newReceipt })
     res.status(201).json({
       findUser, newReceipt
     })
