@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const nodemailer = require('nodemailer')
 const Request = require('../models/Request')
 const User = require('../models/User')
 
@@ -110,6 +111,30 @@ const approveRequest = async function (req, res, next) {
     })
     user.notifications.push(notification)
     await user.save()
+    const transporter = nodemailer.createTransport({
+      service: 'hotmail',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'captenlnw_za@hotmail.com',
+        pass: ''
+      }
+    })
+    const message = {
+      from: 'captenlnw_za@hotmail.com',
+      to: user.email,
+      subject: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      text: 'การยื่นขอขายอีบุ๊คของคุณถูกอนุมัติแล้ว',
+      html: '<p>การยื่นขอขายอีบุ๊คของคุณถูกอนุมัติแล้ว</p>'
+    }
+
+    transporter.sendMail(message, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent: ' + info.response)
+      }
+    })
     req.app.get('io').emit('request-approved', { request, user, admin })
     res.send({ request, user, admin })
   } catch (error) {
@@ -138,6 +163,30 @@ const rejectRequest = async function (req, res, next) {
     })
     user.notifications.push(notification)
     await user.save()
+    const transporter = nodemailer.createTransport({
+      service: 'hotmail',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'captenlnw_za@hotmail.com',
+        pass: ''
+      }
+    })
+    const message = {
+      from: 'captenlnw_za@hotmail.com',
+      to: user.email,
+      subject: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      text: 'การยื่นขอขายอีบุ๊คของคุณถูกปฏิเสธ',
+      html: '<p>การยื่นขอขายอีบุ๊คของคุณถูกปฏิเสธ</p>'
+    }
+
+    transporter.sendMail(message, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent: ' + info.response)
+      }
+    })
     req.app.get('io').emit('request-rejected', { request, admin })
     res.send({ request, admin })
   } catch (error) {
