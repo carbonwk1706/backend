@@ -102,6 +102,14 @@ const approveRequest = async function (req, res, next) {
     const admin = await User.findById(adminId)
     admin.processedRequests.push(request._id)
     await admin.save()
+    const notification = JSON.stringify({
+      type: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      message: 'การยื่นขอขายอีบุ๊คของคุณถูกอนุมัติแล้ว',
+      createdAt: new Date()
+    })
+    user.notifications.push(notification)
+    await user.save()
+    req.app.get('io').emit('request-approved', { request, user, admin })
     res.send({ request, user, admin })
   } catch (error) {
 
@@ -121,6 +129,15 @@ const rejectRequest = async function (req, res, next) {
     const admin = await User.findById(adminId)
     admin.processedRequests.push(request._id)
     await admin.save()
+    const user = await User.findById(request.user)
+    const notification = JSON.stringify({
+      type: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      message: 'การยื่นขอขายอีบุ๊คของคุณถูกปฏิเสธ',
+      createdAt: new Date()
+    })
+    user.notifications.push(notification)
+    await user.save()
+    req.app.get('io').emit('request-rejected', { request, admin })
     res.send({ request, admin })
   } catch (error) {
     res.status(500).send(error)
