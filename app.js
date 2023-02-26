@@ -40,6 +40,7 @@ const requestHistoryAdmin = require('./routes/requestHistoryAdmin')
 const checkDuplicateBook = require('./routes/checkDuplicateBook')
 const allRequestRouter = require('./routes/allRequest')
 const notificationsRouter = require('./routes/notifications')
+const promptpayRouter = require('./routes/promptpay')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -103,4 +104,5 @@ app.use('/history', requestHistoryAdmin)
 app.use('/checkDuplicateBook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), checkDuplicateBook)
 app.use('/allrequest', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), allRequestRouter)
 app.use('/notifications', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), notificationsRouter)
+app.use('/generateQR', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), promptpayRouter)
 module.exports = app
