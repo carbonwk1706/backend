@@ -92,7 +92,8 @@ const register = async function (req, res, next) {
       gender,
       roles
     })
-    newUser.save()
+    await newUser.save()
+    req.app.get('io').emit('new-user', { newUser })
     res.status(201).json(newUser)
   } catch (err) {
     return res.status(500).send({
