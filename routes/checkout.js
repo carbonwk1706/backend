@@ -50,7 +50,7 @@ const checkout = async function (req, res, next) {
     }
   }
   await cart.save()
-
+  req.app.get('io').emit('product-sell')
   res.status(200).json({ user: updateUser, cart })
 }
 
