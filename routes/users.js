@@ -41,6 +41,7 @@ const addUsers = async function (req, res, next) {
   })
   try {
     await newUser.save()
+    req.app.get('io').emit('add-new')
     res.status(201).json(newUser)
   } catch (err) {
     return res.status(500).send({
@@ -60,6 +61,7 @@ const updateUser = async function (req, res, next) {
     user.gender = req.body.gender
     user.roles = req.body.roles
     await user.save()
+    req.app.get('io').emit('update-user')
     return res.status(200).json(user)
   } catch (err) {
     return res.status(404).send({ message: err.message })
@@ -76,6 +78,7 @@ const deleteUser = async function (req, res, next) {
       })
     }
     await User.findByIdAndDelete(user)
+    req.app.get('io').emit('delete-user')
     return res.status(200).send()
   } catch (err) {
     return res.status(404).send({
