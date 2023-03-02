@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
+const HistoryCRUD = require('../models/historyCRUD')
 
 const getUsers = async function (req, res, next) {
   try {
@@ -41,6 +42,16 @@ const addUsers = async function (req, res, next) {
   })
   try {
     await newUser.save()
+    const adminId = req.body.adminId
+    const admin = await User.findById(adminId).exec()
+    const history = new HistoryCRUD({
+      action: 'add',
+      userId: newUser._id,
+      adminId: admin._id
+    })
+    await history.save()
+    admin.historyCRUD.push(history)
+    await admin.save()
     req.app.get('io').emit('add-new')
     res.status(201).json(newUser)
   } catch (err) {
@@ -61,6 +72,16 @@ const updateUser = async function (req, res, next) {
     user.gender = req.body.gender
     user.roles = req.body.roles
     await user.save()
+    const adminId = req.body.adminId
+    const admin = await User.findById(adminId).exec()
+    const history = new HistoryCRUD({
+      action: 'update',
+      userId: user._id,
+      adminId: admin._id
+    })
+    await history.save()
+    admin.historyCRUD.push(history)
+    await admin.save()
     req.app.get('io').emit('update-user')
     return res.status(200).json(user)
   } catch (err) {
@@ -77,6 +98,16 @@ const deleteUser = async function (req, res, next) {
         message: 'User not found!!'
       })
     }
+    const adminId = req.body.adminId
+    const admin = await User.findById(adminId).exec()
+    const history = new HistoryCRUD({
+      action: 'delete',
+      userId: user._id,
+      adminId: admin._id
+    })
+    await history.save()
+    admin.historyCRUD.push(history)
+    await admin.save()
     await User.findByIdAndDelete(user)
     req.app.get('io').emit('delete-user')
     return res.status(200).send()
