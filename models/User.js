@@ -77,6 +77,10 @@ const userSchema = Schema({
   receiptHistory: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Receipt'
+  }],
+  historyCRUD: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'HistoryCRUD'
   }]
 })
 
