@@ -76,6 +76,7 @@ const addBooks = async function (req, res, next) {
   })
   try {
     await newBook.save()
+    req.app.get('io').emit('update-book-create')
     res.status(201).json(newBook)
   } catch (err) {
     return res.status(500).send({
@@ -95,6 +96,7 @@ const updateBook = async function (req, res, next) {
     book.price = req.body.price
     book.imageBook = req.body.imageBook
     await book.save()
+    req.app.get('io').emit('update-book-edit')
     return res.status(200).json(book)
   } catch (err) {
     return res.status(404).send({ message: err.message })
@@ -111,6 +113,7 @@ const deleteBook = async function (req, res, next) {
       })
     }
     await Book.findByIdAndDelete(book)
+    req.app.get('io').emit('update-book-delete')
     return res.status(200).send()
   } catch (err) {
     return res.status(404).send({
