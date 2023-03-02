@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 const HistoryCRUD = require('../models/historyCRUD')
+const DeletedUser = require('../models/DeletedUser')
 
 const getUsers = async function (req, res, next) {
   try {
@@ -91,6 +92,7 @@ const updateUser = async function (req, res, next) {
 
 const deleteUser = async function (req, res, next) {
   const userId = req.params.id
+  const adminId = req.params.adminId
   try {
     const user = await User.findById(userId).exec()
     if (user === null) {
@@ -98,20 +100,49 @@ const deleteUser = async function (req, res, next) {
         message: 'User not found!!'
       })
     }
-    const adminId = req.body.adminId
+    const deletedUser = { ...user._doc }
+    await User.findByIdAndDelete(userId)
     const admin = await User.findById(adminId).exec()
+    if (admin === null) {
+      return res.status(404).json({
+        message: 'Admin not found!!'
+      })
+    }
+    const userDeleted = new DeletedUser({
+      publisher: deletedUser.publisher,
+      firstName: deletedUser.firstName,
+      lastName: deletedUser.lastName,
+      idCard: deletedUser.idCard,
+      name: deletedUser.name,
+      username: deletedUser.username,
+      email: deletedUser.email,
+      phone: deletedUser.phone,
+      address: deletedUser.address,
+      road: deletedUser.road,
+      subDistrict: deletedUser.subDistrict,
+      district: deletedUser.district,
+      province: deletedUser.province,
+      postCode: deletedUser.postCode,
+      bankAccount: deletedUser.bankAccount,
+      idAccount: deletedUser.idAccount,
+      coin: deletedUser.coin,
+      gender: deletedUser.gender,
+      roles: deletedUser.roles
+    })
+    await userDeleted.save()
     const history = new HistoryCRUD({
       action: 'delete',
-      userId: user._id,
+      userId: deletedUser._id,
       adminId: admin._id
     })
     await history.save()
     admin.historyCRUD.push(history)
     await admin.save()
-    await User.findByIdAndDelete(user)
     req.app.get('io').emit('delete-user')
-    return res.status(200).send()
+    return res.status(200).send({
+    })
   } catch (err) {
+    console.log(err.message)
     return res.status(404).send({
       message: err.message
     })
@@ -122,5 +153,5 @@ router.get('/', getUsers)
 router.get('/:id', getUser)
 router.post('/', addUsers)
 router.put('/:id', updateUser)
-router.delete('/:id', deleteUser)
+router.delete('/:id/:adminId', deleteUser)
 module.exports = router
