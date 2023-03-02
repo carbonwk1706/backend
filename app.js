@@ -41,6 +41,7 @@ const checkDuplicateBook = require('./routes/checkDuplicateBook')
 const allRequestRouter = require('./routes/allRequest')
 const notificationsRouter = require('./routes/notifications')
 const promptpayRouter = require('./routes/promptpay')
+const historyCRUDRouter = require('./routes/crudHistoryAdmin')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -61,7 +62,6 @@ app.use('/upload', express.static('/uploads'), authenMiddleware, authorizeMiddle
 app.get('/uploads/:filename', (req, res) => {
   const options = {
     root: path.join(__dirname, 'uploads'),
-    dotfiles: 'deny',
     headers: {
       'x-timestamp': Date.now(),
       'x-sent': true
@@ -100,9 +100,10 @@ app.use('/searchbook', searchBookRouter)
 app.use('/receiptbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), receiptBookRouter)
 app.use('/allreview', AllReviewRouter)
 app.use('/requestcoin', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), requestCoinRouter)
-app.use('/history', requestHistoryAdmin)
+app.use('/history', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), requestHistoryAdmin)
 app.use('/checkDuplicateBook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), checkDuplicateBook)
 app.use('/allrequest', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), allRequestRouter)
 app.use('/notifications', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), notificationsRouter)
 app.use('/generateQR', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), promptpayRouter)
+app.use('/historycrud', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDRouter)
 module.exports = app
