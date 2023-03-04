@@ -81,7 +81,8 @@ const userSchema = Schema({
   historyCRUD: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'HistoryCRUD'
-  }]
+  }],
+  createdAt: { type: Date, default: Date.now }
 })
 
 userSchema.pre('save', function (next) {
