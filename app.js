@@ -42,6 +42,7 @@ const allRequestRouter = require('./routes/allRequest')
 const notificationsRouter = require('./routes/notifications')
 const promptpayRouter = require('./routes/promptpay')
 const historyCRUDRouter = require('./routes/crudHistoryAdmin')
+const userDeletedRouter = require('./routes/userDeleted')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -106,4 +107,5 @@ app.use('/allrequest', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.L
 app.use('/notifications', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), notificationsRouter)
 app.use('/generateQR', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), promptpayRouter)
 app.use('/historycrud', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDRouter)
+app.use('/userdelete', userDeletedRouter)
 module.exports = app
