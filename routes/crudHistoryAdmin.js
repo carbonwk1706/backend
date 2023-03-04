@@ -68,8 +68,26 @@ const getHistoryDelete = async function (req, res, next) {
   }
 }
 
+const detailHistoryCRUD = async function (req, res) {
+  const id = req.params.id
+  try {
+    const history = await HistoryCRUD.findById(id).exec()
+    if (!history) {
+      return res.status(404).json({
+        message: 'History not found!!'
+      })
+    }
+    res.json(history)
+  } catch (err) {
+    return res.status(404).send({
+      message: err.message
+    })
+  }
+}
+
 router.get('/all/:id', getHistoryCRUD)
 router.get('/create/:id', getHistoryCreate)
 router.get('/update/:id', getHistoryUpdate)
 router.get('/delete/:id', getHistoryDelete)
+router.get('/detail/:id', detailHistoryCRUD)
 module.exports = router
