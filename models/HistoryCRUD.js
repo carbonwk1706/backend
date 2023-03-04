@@ -18,6 +18,12 @@ const HistoryCRUDSchema = Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  oldData: {
+    type: Object
+  },
+  newData: {
+    type: Object
   }
 })
 
