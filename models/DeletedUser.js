@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const DeletedUserSchema = new Schema({
+  userId: String,
   publisher: String,
   firstName: String,
   lastName: String,
@@ -13,8 +14,7 @@ const DeletedUserSchema = new Schema({
   },
   username: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   email: {
     type: String,
@@ -38,6 +38,9 @@ const DeletedUserSchema = new Schema({
   roles: {
     type: [String],
     default: [ROLE.USER]
+  },
+  createdAt: {
+    type: Date
   }
 })
 
