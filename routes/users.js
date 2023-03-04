@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const nodemailer = require('nodemailer')
 const User = require('../models/User')
 const HistoryCRUD = require('../models/historyCRUD')
 const DeletedUser = require('../models/DeletedUser')
@@ -86,7 +87,40 @@ const updateUser = async function (req, res, next) {
     await history.save()
     admin.historyCRUD.push(history)
     await admin.save()
-    req.app.get('io').emit('update-user')
+    const notification = JSON.stringify({
+      type: 'เรื่อง ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
+      message: 'ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
+      createdAt: new Date()
+    })
+    user.notifications.push(notification)
+    await user.save()
+    const transporter = nodemailer.createTransport({
+      service: 'hotmail',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'captenlnw_za@hotmail.com',
+        pass: ''
+      }
+    })
+    const message = {
+      from: 'captenlnw_za@hotmail.com',
+      to: originalUser.email,
+      subject: 'เรื่อง ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
+      text: 'ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
+      html: '<p>ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ</p>'
+    }
+
+    transporter.sendMail(message, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent: ' + info.response)
+      }
+    })
+    req.app.get('io').emit('update-user', {
+      user
+    })
     return res.status(200).json(user)
   } catch (err) {
     return res.status(404).send({ message: err.message })
@@ -143,6 +177,30 @@ const deleteUser = async function (req, res, next) {
     await history.save()
     admin.historyCRUD.push(history)
     await admin.save()
+    const transporter = nodemailer.createTransport({
+      service: 'hotmail',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'captenlnw_za@hotmail.com',
+        pass: ''
+      }
+    })
+    const message = {
+      from: 'captenlnw_za@hotmail.com',
+      to: deletedUser.email,
+      subject: 'เรื่อง ID ของคุณถูกลบโดยผู้ดูแลระบบ',
+      text: 'ID ของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
+      html: '<p>ID ของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ</p>'
+    }
+
+    transporter.sendMail(message, function (error, info) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log('Email sent: ' + info.response)
+      }
+    })
     req.app.get('io').emit('delete-user')
     return res.status(200).send({
     })
