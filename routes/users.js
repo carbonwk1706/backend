@@ -20,7 +20,7 @@ const getUser = async function (req, res, next) {
   try {
     const user = await User.findById(userId).exec()
     if (user === null) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: 'User not found!!'
       })
     }
@@ -65,6 +65,7 @@ const addUsers = async function (req, res, next) {
 const updateUser = async function (req, res, next) {
   const userId = req.params.id
   try {
+    const originalUser = await User.findById(userId).exec()
     const user = await User.findById(userId).exec()
     user.name = req.body.name
     user.username = req.body.username
@@ -78,7 +79,9 @@ const updateUser = async function (req, res, next) {
     const history = new HistoryCRUD({
       action: 'update',
       userId: user._id,
-      adminId: admin._id
+      adminId: admin._id,
+      oldData: originalUser,
+      newData: user
     })
     await history.save()
     admin.historyCRUD.push(history)
@@ -109,6 +112,7 @@ const deleteUser = async function (req, res, next) {
       })
     }
     const userDeleted = new DeletedUser({
+      userId: deletedUser._id,
       publisher: deletedUser.publisher,
       firstName: deletedUser.firstName,
       lastName: deletedUser.lastName,
@@ -127,7 +131,8 @@ const deleteUser = async function (req, res, next) {
       idAccount: deletedUser.idAccount,
       coin: deletedUser.coin,
       gender: deletedUser.gender,
-      roles: deletedUser.roles
+      roles: deletedUser.roles,
+      createdAt: deletedUser.createdAt
     })
     await userDeleted.save()
     const history = new HistoryCRUD({
