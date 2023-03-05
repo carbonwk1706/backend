@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const DeletedBookSchema = new Schema({
+  bookId: String,
   pdf: {
     type: String,
     required: true
@@ -31,8 +32,7 @@ const DeletedBookSchema = new Schema({
     required: true
   },
   createdAt: {
-    type: Date,
-    default: Date.now
+    type: Date
   },
   rating: {
     type: Number,
