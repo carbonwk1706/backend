@@ -188,7 +188,7 @@ const deleteUser = async function (req, res, next) {
     })
     const message = {
       from: 'captenlnw_za@hotmail.com',
-      to: deletedUser.email,
+      to: userDeleted.email,
       subject: 'เรื่อง ID ของคุณถูกลบโดยผู้ดูแลระบบ',
       text: 'ID ของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
       html: '<p>ID ของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ</p>'
@@ -201,7 +201,9 @@ const deleteUser = async function (req, res, next) {
         console.log('Email sent: ' + info.response)
       }
     })
-    req.app.get('io').emit('delete-user')
+    req.app.get('io').emit('delete-user', {
+      userDeleted
+    })
     return res.status(200).send({
     })
   } catch (err) {
