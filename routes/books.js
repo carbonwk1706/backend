@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Book = require('../models/Book')
+const User = require('../models/User')
+const HistoryCRUDBook = require('../models/HistoryCRUDBook')
 
 const getBooks = async function (req, res, next) {
   try {
@@ -72,12 +74,25 @@ const addBooks = async function (req, res, next) {
     publisher: req.body.publisher,
     category: req.body.category,
     price: req.body.price,
-    imageBook: req.body.imageBook
+    imageBook: req.body.imageBook,
+    pdf: req.body.pdf
   })
   try {
     await newBook.save()
+    const adminId = req.body.adminId
+    const admin = await User.findById(adminId).exec()
+    const history = new HistoryCRUDBook({
+      action: 'add',
+      bookId: newBook._id,
+      adminId: admin._id
+    })
+    await history.save()
+    admin.historyCRUDBook.push(history)
+    await admin.save()
     req.app.get('io').emit('update-book-create')
-    res.status(201).json(newBook)
+    res.status(201).json({
+      newBook
+    })
   } catch (err) {
     return res.status(500).send({
       message: err.message
@@ -88,6 +103,7 @@ const addBooks = async function (req, res, next) {
 const updateBook = async function (req, res, next) {
   const bookId = req.params.id
   try {
+    const originalBook = await Book.findById(bookId).exec()
     const book = await Book.findById(bookId).exec()
     book.name = req.body.name
     book.author = req.body.author
@@ -96,7 +112,21 @@ const updateBook = async function (req, res, next) {
     book.price = req.body.price
     book.imageBook = req.body.imageBook
     await book.save()
-    req.app.get('io').emit('update-book-edit')
+    const adminId = req.body.adminId
+    const admin = await User.findById(adminId).exec()
+    const history = new HistoryCRUDBook({
+      action: 'update',
+      bookId: book._id,
+      adminId: admin._id,
+      oldData: originalBook,
+      newData: book
+    })
+    await history.save()
+    admin.historyCRUDBook.push(history)
+    await admin.save()
+    req.app.get('io').emit('update-book-edit', {
+      book
+    })
     return res.status(200).json(book)
   } catch (err) {
     return res.status(404).send({ message: err.message })
@@ -129,5 +159,5 @@ router.get('/novel', getBooksNovel)
 router.get('/:id', getBook)
 router.post('/', addBooks)
 router.put('/:id', updateBook)
-router.delete('/:id', deleteBook)
+router.delete('/:id/:adminId', deleteBook)
 module.exports = router
