@@ -3,6 +3,7 @@ const router = express.Router()
 const Book = require('../models/Book')
 const User = require('../models/User')
 const HistoryCRUDBook = require('../models/HistoryCRUDBook')
+const DeletedBook = require('../models/DeletedBook')
 
 const getBooks = async function (req, res, next) {
   try {
@@ -55,7 +56,7 @@ const getBook = async function (req, res, next) {
   try {
     const book = await Book.findById(bookId).exec()
     if (book === null) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: 'Book not found!!'
       })
     }
@@ -135,6 +136,7 @@ const updateBook = async function (req, res, next) {
 
 const deleteBook = async function (req, res, next) {
   const bookId = req.params.id
+  const adminId = req.params.adminId
   try {
     const book = await Book.findById(bookId).exec()
     if (book === null) {
@@ -142,8 +144,40 @@ const deleteBook = async function (req, res, next) {
         message: 'Book not found!!'
       })
     }
+    const deletedBook = { ...book._doc }
     await Book.findByIdAndDelete(book)
-    req.app.get('io').emit('update-book-delete')
+    const admin = await User.findById(adminId).exec()
+    if (admin === null) {
+      return res.status(404).json({
+        message: 'Admin not found!!'
+      })
+    }
+    const bookDeleted = new DeletedBook({
+      bookId: deletedBook._id,
+      pdf: deletedBook.pdf,
+      name: deletedBook.name,
+      author: deletedBook.author,
+      publisher: deletedBook.publisher,
+      category: deletedBook.category,
+      price: deletedBook.price,
+      imageBook: deletedBook.imageBook,
+      createdAt: deletedBook.createdAt,
+      rating: deletedBook.rating,
+      ratingsCount: deletedBook.ratingsCount,
+      sold: deletedBook.sold
+    })
+    await bookDeleted.save()
+    const history = new HistoryCRUDBook({
+      action: 'delete',
+      bookId: deletedBook._id,
+      adminId: admin._id
+    })
+    await history.save()
+    admin.historyCRUDBook.push(history)
+    await admin.save()
+    req.app.get('io').emit('update-book-delete', {
+      bookDeleted
+    })
     return res.status(200).send()
   } catch (err) {
     return res.status(404).send({
