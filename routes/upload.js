@@ -82,6 +82,7 @@ router.post('/pdf/:id', upload.single('pdf'), async (req, res) => {
 
   try {
     const book = await Book.findByIdAndUpdate(req.params.id, { $set: { pdf } }, { new: true })
+    req.app.get('io').emit('upload-pdf-book')
     res.json(book)
   } catch (error) {
     res.status(500).send(error)
@@ -96,6 +97,7 @@ router.post('/imageBook/:id', upload.single('image'), async (req, res) => {
 
   try {
     const book = await Book.findByIdAndUpdate(req.params.id, { $set: { imageBook } }, { new: true })
+    req.app.get('io').emit('upload-image-book')
     res.json(book)
   } catch (error) {
     res.status(500).send(error)
