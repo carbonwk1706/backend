@@ -82,6 +82,10 @@ const userSchema = Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'HistoryCRUD'
   }],
+  historyCRUDBook: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'historyCRUDBook'
+  }],
   createdAt: { type: Date, default: Date.now }
 })
 
