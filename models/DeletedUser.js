@@ -8,18 +8,9 @@ const DeletedUserSchema = new Schema({
   firstName: String,
   lastName: String,
   idCard: String,
-  name: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
+  name: String,
+  username: String,
+  email: String,
   phone: String,
   address: String,
   road: String,
