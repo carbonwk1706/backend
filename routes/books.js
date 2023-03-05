@@ -127,7 +127,7 @@ const updateBook = async function (req, res, next) {
     req.app.get('io').emit('update-book-edit', {
       book
     })
-    return res.status(200).json(book)
+    return res.status(200).json({ book })
   } catch (err) {
     return res.status(404).send({ message: err.message })
   }
