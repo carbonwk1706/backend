@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const bookSchema = Schema({
+  pdf: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
