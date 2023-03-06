@@ -109,8 +109,8 @@ app.use('/allrequest', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.L
 app.use('/notifications', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), notificationsRouter)
 app.use('/generateQR', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), promptpayRouter)
 app.use('/historycrud', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDRouter)
-app.use('/userdelete', userDeletedRouter)
+app.use('/userdelete', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), userDeletedRouter)
 app.use('/historycrudbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDBookRouter)
-app.use('/bookdelete', bookDeletedRouter)
+app.use('/bookdelete', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), bookDeletedRouter)
 
 module.exports = app
