@@ -125,6 +125,18 @@ const updateBook = async function (req, res, next) {
     await history.save()
     admin.historyCRUDBook.push(history)
     await admin.save()
+    const users = await User.find({})
+    for (const user of users) {
+      if (user.inventory.includes(bookId)) {
+        const notification = JSON.stringify({
+          type: 'หนังสือเรื่อง : ' + book.name + ' ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
+          message: 'หนังสือของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
+          createdAt: new Date()
+        })
+        user.notifications.push(notification)
+        await user.save()
+      }
+    }
     req.app.get('io').emit('update-book-edit', {
       book
     })
@@ -195,6 +207,18 @@ const deleteBook = async function (req, res, next) {
     await history.save()
     admin.historyCRUDBook.push(history)
     await admin.save()
+    const users = await User.find({})
+    for (const user of users) {
+      if (user.inventory.includes(bookId)) {
+        const notification = JSON.stringify({
+          type: 'หนังสือเรื่อง : ' + deletedBook.name + ' ของคุณถูกลบโดยผู้ดูแลระบบ',
+          message: 'หนังสือของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
+          createdAt: new Date()
+        })
+        user.notifications.push(notification)
+        await user.save()
+      }
+    }
     req.app.get('io').emit('update-book-delete', {
       bookDeleted
     })
