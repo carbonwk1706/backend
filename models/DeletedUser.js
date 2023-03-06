@@ -1,8 +1,13 @@
 const { ROLE } = require('../constant')
 const mongoose = require('mongoose')
+const gravatar = require('gravatar')
 const { Schema } = mongoose
 
 const DeletedUserSchema = new Schema({
+  imageUrl: {
+    type: String,
+    default: function () { return gravatar.url(this.username, { s: '200', r: 'pg', d: 'mm' }, true) }
+  },
   userId: String,
   publisher: String,
   firstName: String,
