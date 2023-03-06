@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 const bookSchema = Schema({
   pdf: {
-    type: String,
-    required: true
+    type: String
   },
   name: {
     type: String,
