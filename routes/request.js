@@ -105,7 +105,7 @@ const approveRequest = async function (req, res, next) {
     admin.processedRequests.push(request._id)
     await admin.save()
     const notification = JSON.stringify({
-      type: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      type: 'เรื่อง : การยื่นขอขายอีบุ๊ค',
       message: 'การยื่นขอขายอีบุ๊คของคุณถูกอนุมัติแล้ว',
       createdAt: new Date()
     })
@@ -123,7 +123,7 @@ const approveRequest = async function (req, res, next) {
     const message = {
       from: 'captenlnw_za@hotmail.com',
       to: user.email,
-      subject: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      subject: 'เรื่อง : การยื่นขอขายอีบุ๊ค',
       text: 'การยื่นขอขายอีบุ๊คของคุณถูกอนุมัติแล้ว',
       html: '<p>การยื่นขอขายอีบุ๊คของคุณถูกอนุมัติแล้ว</p>'
     }
@@ -157,7 +157,7 @@ const rejectRequest = async function (req, res, next) {
     await admin.save()
     const user = await User.findById(request.user)
     const notification = JSON.stringify({
-      type: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      type: 'เรื่อง : การยื่นขอขายอีบุ๊ค',
       message: 'การยื่นขอขายอีบุ๊คของคุณถูกปฏิเสธ',
       createdAt: new Date()
     })
@@ -175,7 +175,7 @@ const rejectRequest = async function (req, res, next) {
     const message = {
       from: 'captenlnw_za@hotmail.com',
       to: user.email,
-      subject: 'เรื่อง การยื่นขอขายอีบุ๊ค',
+      subject: 'เรื่อง : การยื่นขอขายอีบุ๊ค',
       text: 'การยื่นขอขายอีบุ๊คของคุณถูกปฏิเสธ',
       html: '<p>การยื่นขอขายอีบุ๊คของคุณถูกปฏิเสธ</p>'
     }

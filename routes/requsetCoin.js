@@ -40,7 +40,7 @@ const approveRequest = async function (req, res, next) {
     admin.processedReceipts.push(request._id)
     await admin.save()
     const notification = JSON.stringify({
-      type: 'เรื่อง แจ้งชำระการเติม Coin',
+      type: 'เรื่อง : แจ้งชำระการเติม Coin',
       message: 'การแจ้งชำระการขอเติม Coin ของคุณถูกอนุมัติแล้ว',
       createdAt: new Date()
     })
@@ -58,7 +58,7 @@ const approveRequest = async function (req, res, next) {
     const message = {
       from: 'captenlnw_za@hotmail.com',
       to: user.email,
-      subject: 'เรื่อง แจ้งชำระการเติม Coin',
+      subject: 'เรื่อง : แจ้งชำระการเติม Coin',
       text: 'การแจ้งชำระการเติม Coin ของคุณถูกอนุมัติแล้ว',
       html: '<p>การแจ้งชำระการเติม Coin ของคุณถูกอนุมัติแล้ว</p>'
     }
@@ -92,7 +92,7 @@ const rejectRequest = async function (req, res, next) {
     await admin.save()
     const user = await User.findById(request.user)
     const notification = JSON.stringify({
-      type: 'เรื่อง แจ้งชำระการเติม Coin',
+      type: 'เรื่อง : แจ้งชำระการเติม Coin',
       message: 'การแจ้งชำระการขอเติม Coin ของคุณถูกปฏิเสธ',
       createdAt: new Date()
     })
@@ -110,7 +110,7 @@ const rejectRequest = async function (req, res, next) {
     const message = {
       from: 'captenlnw_za@hotmail.com',
       to: user.email,
-      subject: 'เรื่อง แจ้งชำระการเติม Coin',
+      subject: 'เรื่อง : แจ้งชำระการเติม Coin',
       text: 'การแจ้งชำระการเติม Coin ของคุณถูกปฏิเสธ',
       html: '<p>การแจ้งชำระการเติม Coin ของคุณถูกปฏิเสธ</p>'
     }
