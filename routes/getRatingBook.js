@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 const Book = require('../models/Book')
+const DeletedUser = require('../models/DeletedUser')
 
 const getReviews = async (req, res) => {
   const bookId = req.params.id
@@ -13,6 +14,27 @@ const getReviews = async (req, res) => {
 
   const reviewPromises = book.reviews.map(async review => {
     const user = await User.findById(review.user)
+    if (!user) {
+      const deletedUser = await DeletedUser.findOne({ userId: review.user })
+      if (!deletedUser) {
+        return {
+          rating: review.rating,
+          comment: review.comment,
+          name: 'User not found',
+          imageUrl: '',
+          createAt: review.createdAt
+        }
+      }
+
+      return {
+        rating: review.rating,
+        comment: review.comment,
+        name: deletedUser.name + ' (บัญชีนี้ถูกลบไปแล้ว)',
+        imageUrl: deletedUser.imageUrl,
+        createAt: review.createdAt
+      }
+    }
+
     return {
       rating: review.rating,
       comment: review.comment,
