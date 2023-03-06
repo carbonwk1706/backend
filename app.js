@@ -44,6 +44,7 @@ const promptpayRouter = require('./routes/promptpay')
 const historyCRUDRouter = require('./routes/crudHistoryAdmin')
 const historyCRUDBookRouter = require('./routes/crudHistoryBook')
 const userDeletedRouter = require('./routes/userDeleted')
+const bookDeletedRouter = require('./routes/booksDeleted')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -110,5 +111,6 @@ app.use('/generateQR', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.L
 app.use('/historycrud', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDRouter)
 app.use('/userdelete', userDeletedRouter)
 app.use('/historycrudbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDBookRouter)
+app.use('/bookdelete', bookDeletedRouter)
 
 module.exports = app
