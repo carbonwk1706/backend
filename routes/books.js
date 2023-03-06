@@ -128,10 +128,30 @@ const updateBook = async function (req, res, next) {
     req.app.get('io').emit('update-book-edit', {
       book
     })
-    return res.status(200).json({ book })
+    return res.status(200).json({ book, history })
   } catch (err) {
     return res.status(404).send({ message: err.message })
   }
+}
+
+const updateImageNewData = async function (req, res) {
+  const historyId = req.params.historyId
+  const updatedHistory = await HistoryCRUDBook.findOneAndUpdate(
+    { _id: historyId },
+    { $set: { 'newData.imageBook': req.body.imageBook } },
+    { new: true }
+  ).exec()
+  res.status(200).json({ history: updatedHistory })
+}
+
+const updatePDFNewData = async function (req, res) {
+  const historyId = req.params.historyId
+  const updatedHistory = await HistoryCRUDBook.findOneAndUpdate(
+    { _id: historyId },
+    { $set: { 'newData.pdf': req.body.pdf } },
+    { new: true }
+  ).exec()
+  res.status(200).json({ history: updatedHistory })
 }
 
 const deleteBook = async function (req, res, next) {
@@ -194,4 +214,6 @@ router.get('/:id', getBook)
 router.post('/', addBooks)
 router.put('/:id', updateBook)
 router.delete('/:id/:adminId', deleteBook)
+router.patch('/updateImage/:historyId', updateImageNewData)
+router.patch('/updatePdf/:historyId', updatePDFNewData)
 module.exports = router
