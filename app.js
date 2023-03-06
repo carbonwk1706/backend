@@ -45,6 +45,8 @@ const historyCRUDRouter = require('./routes/crudHistoryAdmin')
 const historyCRUDBookRouter = require('./routes/crudHistoryBook')
 const userDeletedRouter = require('./routes/userDeleted')
 const bookDeletedRouter = require('./routes/booksDeleted')
+const totalSoldRouter = require('./routes/totalSold')
+const findUserRouter = require('./routes/findRoleUser')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -112,5 +114,7 @@ app.use('/historycrud', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.
 app.use('/userdelete', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), userDeletedRouter)
 app.use('/historycrudbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), historyCRUDBookRouter)
 app.use('/bookdelete', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), bookDeletedRouter)
+app.use('/totalsold', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), totalSoldRouter)
+app.use('/finduser', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), findUserRouter)
 
 module.exports = app
