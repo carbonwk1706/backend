@@ -88,7 +88,7 @@ const updateUser = async function (req, res, next) {
     admin.historyCRUD.push(history)
     await admin.save()
     const notification = JSON.stringify({
-      type: 'เรื่อง ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
+      type: 'เรื่อง : ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
       message: 'ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
       createdAt: new Date()
     })
@@ -106,7 +106,7 @@ const updateUser = async function (req, res, next) {
     const message = {
       from: 'captenlnw_za@hotmail.com',
       to: originalUser.email,
-      subject: 'เรื่อง ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
+      subject: 'เรื่อง : ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบ',
       text: 'ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
       html: '<p>ID ของคุณถูกแก้ไขโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ</p>'
     }
@@ -146,6 +146,7 @@ const deleteUser = async function (req, res, next) {
       })
     }
     const userDeleted = new DeletedUser({
+      imageUrl: deletedUser.imageUrl,
       userId: deletedUser._id,
       publisher: deletedUser.publisher,
       firstName: deletedUser.firstName,
@@ -189,7 +190,7 @@ const deleteUser = async function (req, res, next) {
     const message = {
       from: 'captenlnw_za@hotmail.com',
       to: userDeleted.email,
-      subject: 'เรื่อง ID ของคุณถูกลบโดยผู้ดูแลระบบ',
+      subject: 'เรื่อง : ID ของคุณถูกลบโดยผู้ดูแลระบบ',
       text: 'ID ของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ',
       html: '<p>ID ของคุณถูกลบโดยผู้ดูแลระบบโปรดติดต่อผู้ดูแลระบบ</p>'
     }
