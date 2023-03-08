@@ -19,15 +19,17 @@ const getReceiptBooks = async function (req, res) {
 const receiptBookDetail = async function (req, res) {
   const receiptBookId = req.params.receiptBookId
   const userId = req.params.userId
-  const user = await User.findById(userId).populate('receiptBooks.books')
+  const user = await User.findById(userId).populate('receiptBooks')
   const receiptBook = user.receiptBooks.find(receiptBook => receiptBook._id.toString() === receiptBookId)
   if (!receiptBook) {
     return res.status(404).send({ error: 'Receipt book not found' })
   }
 
+  console.log(receiptBook)
+
   const books = []
-  for (let i = 0; i < receiptBook.oldData.length; i++) {
-    const book = receiptBook.oldData[i]
+  for (let i = 0; i < receiptBook.books.length; i++) {
+    const book = receiptBook.books[i]
     const foundBook = await Book.findById(book._id)
     if (foundBook) {
       books.push(foundBook)

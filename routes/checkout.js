@@ -32,10 +32,10 @@ const checkout = async function (req, res, next) {
   const updateUser = await User.findByIdAndUpdate(userId, {
     $inc: { coin: -totalCost },
     $push: {
-      inventory: { $each: selectedItems.map(item => item.product) },
+      inventory: selectedItems.map(item => item.product),
       receiptBooks: [{
         books: selectedItems.map(item => item.product),
-        oldData: selectedItems.map(item => item.product._id),
+        // oldData: selectedItems.map(item => item.product._id),
         totalCost,
         count: selectedItems.length,
         createdAt: new Date()
