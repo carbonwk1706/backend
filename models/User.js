@@ -61,8 +61,7 @@ const userSchema = Schema({
     ref: 'Request'
   }],
   receiptBooks: [{
-    books: [{ type: Schema.Types.ObjectId, ref: 'Book' }],
-    // oldData: [{ type: ObjectId }],
+    books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
     totalCost: Number,
     count: Number,
     createdAt: { type: Date, default: Date.now }

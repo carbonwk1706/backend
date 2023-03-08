@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const RatingSchema = Schema({
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
-  book: { type: Schema.Types.ObjectId, ref: 'Book' },
+  user: { type: Object, required: true },
+  book: { type: Object, required: true },
   rating: { type: Number, required: true },
   comment: { type: String },
   createdAt: { type: Date, default: Date.now }

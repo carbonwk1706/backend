@@ -35,7 +35,6 @@ const checkout = async function (req, res, next) {
       inventory: selectedItems.map(item => item.product),
       receiptBooks: [{
         books: selectedItems.map(item => item.product),
-        // oldData: selectedItems.map(item => item.product._id),
         totalCost,
         count: selectedItems.length,
         createdAt: new Date()

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 const Book = require('../models/Book')
+const Rating = require('../models/Rating')
 
 const rateBook = async (req, res, next) => {
   const userId = req.body.userId
@@ -28,6 +29,9 @@ const rateBook = async (req, res, next) => {
       message: 'You have not purchased this book'
     })
   }
+
+  const ratings = new Rating({ user: userId, book: bookId, rating, comment })
+  await ratings.save()
 
   user.ratings.push({ book: bookId, rating, comment })
   await user.save()

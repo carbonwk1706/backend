@@ -25,8 +25,6 @@ const receiptBookDetail = async function (req, res) {
     return res.status(404).send({ error: 'Receipt book not found' })
   }
 
-  console.log(receiptBook)
-
   const books = []
   for (let i = 0; i < receiptBook.books.length; i++) {
     const book = receiptBook.books[i]
