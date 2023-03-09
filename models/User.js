@@ -2,7 +2,6 @@ const { ROLE } = require('../constant')
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const gravatar = require('gravatar')
-// const { ObjectId } = require('mongoose/lib/schema/index')
 const { Schema } = mongoose
 
 const userSchema = Schema({
@@ -79,6 +78,10 @@ const userSchema = Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Receipt'
   }],
+  requestBookHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'RequestBook'
+  }],
   historyCRUD: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'HistoryCRUD'
@@ -86,6 +89,10 @@ const userSchema = Schema({
   historyCRUDBook: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'historyCRUDBook'
+  }],
+  BookSell: [{
+    books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
+    addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
   }],
   createdAt: { type: Date, default: Date.now }
 })
