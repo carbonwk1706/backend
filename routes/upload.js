@@ -5,6 +5,7 @@ const User = require('../models/User')
 const Receipt = require('../models/Receipt')
 const Request = require('../models/Request')
 const Book = require('../models/Book')
+const RequestBook = require('../models/RequestBook')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -69,6 +70,36 @@ router.post('/imageBankAccount/:id', upload.single('image'), async (req, res) =>
   try {
     const request = await Request.findByIdAndUpdate(req.params.id, { $set: { imageBankAccount } }, { new: true })
     res.json(request)
+  } catch (error) {
+    res.status(500).send(error)
+  }
+})
+
+router.post('/requestpdf/:id', upload.single('pdf'), async (req, res) => {
+  const host = req.headers.host
+  const protocol = req.protocol
+
+  const pdf = `${protocol}://${host}/uploads/${req.file.filename}`
+
+  try {
+    const request = await RequestBook.findByIdAndUpdate(req.params.id, { $set: { pdf } }, { new: true })
+    req.app.get('io').emit('request-upload-pdf-book')
+    res.status(200).json({ request })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+})
+
+router.post('/requestimageBook/:id', upload.single('image'), async (req, res) => {
+  const host = req.headers.host
+  const protocol = req.protocol
+
+  const imageBook = `${protocol}://${host}/uploads/${req.file.filename}`
+
+  try {
+    const request = await RequestBook.findByIdAndUpdate(req.params.id, { $set: { imageBook } }, { new: true })
+    req.app.get('io').emit('request-upload-image-book')
+    res.status(200).json({ request })
   } catch (error) {
     res.status(500).send(error)
   }
