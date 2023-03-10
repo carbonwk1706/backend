@@ -50,6 +50,7 @@ const findUserRouter = require('./routes/findRoleUser')
 const allRatingBooksRouter = require('./routes/allRatingBooks')
 const requestBookRouter = require('./routes/requestBooks')
 const BookSellRouter = require('./routes/usersellbook')
+const totalSoldUserRouter = require('./routes/totalSoldUser')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -122,5 +123,6 @@ app.use('/finduser', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOC
 app.use('/allrating', allRatingBooksRouter)
 app.use('/requestbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), requestBookRouter)
 app.use('/booksell', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), BookSellRouter)
+app.use('/totalsolduser', totalSoldUserRouter)
 
 module.exports = app

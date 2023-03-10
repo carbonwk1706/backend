@@ -101,6 +101,9 @@ const approveRequest = async function (req, res, next) {
       pdf: request.pdf
     })
     await newBook.save()
+
+    user.bookSell.push(newBook)
+    await user.save()
     const admin = await User.findById(adminId)
     const history = new HistoryCRUDBook({
       action: 'add',
@@ -111,6 +114,9 @@ const approveRequest = async function (req, res, next) {
     admin.historyCRUDBook.push(history)
     await admin.save()
 
+    user.historyCRUDBook.push(history)
+    await user.save()
+
     admin.processedRequestsBook.push(request._id)
     await admin.save()
     const notification = JSON.stringify({
@@ -118,11 +124,6 @@ const approveRequest = async function (req, res, next) {
       message: 'การยื่นขอขายหนังสือของคุณถูกอนุมัติ',
       createdAt: new Date()
     })
-    user.BookSell.push({
-      books: [newBook._id],
-      addedBy: admin._id
-    })
-    await user.save()
     user.notifications.push(notification)
     await user.save()
     const transporter = nodemailer.createTransport({
