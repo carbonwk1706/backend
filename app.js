@@ -48,6 +48,8 @@ const bookDeletedRouter = require('./routes/booksDeleted')
 const totalSoldRouter = require('./routes/totalSold')
 const findUserRouter = require('./routes/findRoleUser')
 const allRatingBooksRouter = require('./routes/allRatingBooks')
+const requestBookRouter = require('./routes/requestBooks')
+const BookSellRouter = require('./routes/usersellbook')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -62,7 +64,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
-app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), usersRouter)
+app.use('/users', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.SELL]), usersRouter)
 app.use('/auth', authRouter)
 app.use('/upload', express.static('/uploads'), authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), uploadRouter)
 app.get('/uploads/:filename', (req, res) => {
@@ -118,5 +120,7 @@ app.use('/bookdelete', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.L
 app.use('/totalsold', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), totalSoldRouter)
 app.use('/finduser', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN]), findUserRouter)
 app.use('/allrating', allRatingBooksRouter)
+app.use('/requestbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), requestBookRouter)
+app.use('/booksell', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), BookSellRouter)
 
 module.exports = app
