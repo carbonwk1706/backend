@@ -5,10 +5,9 @@ const User = require('../models/User')
 const getBooksell = async function (req, res) {
   try {
     const userId = req.params.userId
-    const user = await User.findById(userId).populate('BookSell.books').sort({ createdAt: -1 }).exec()
+    const user = await User.findById(userId).populate('bookSell')
     if (!user) return res.status(404).send('User not found')
-    const bookSell = user.BookSell
-    res.send(bookSell)
+    res.send(user.bookSell)
   } catch (error) {
     res.status(500).send(error)
   }
@@ -18,16 +17,13 @@ const getBooksCartoon = async function (req, res, next) {
   try {
     const userId = req.params.userId
     const category = 'การ์ตูนทั่วไป'
-    const user = await User.findById(userId).populate('BookSell.books')
+    const user = await User.findById(userId).populate({
+      path: 'bookSell',
+      model: 'Book',
+      match: { category }
+    })
     if (!user) return res.status(404).send('User not found')
-    const bookSell = user.BookSell
-    const filteredBooks = []
-    for (let i = 0; i < bookSell.length; i++) {
-      if (bookSell[i].books[0].category === category) {
-        filteredBooks.push(bookSell[i])
-      }
-    }
-    res.send(filteredBooks)
+    res.send(user.bookSell)
   } catch (err) {
     return res.status(500).send({
       message: err.message
@@ -35,22 +31,17 @@ const getBooksCartoon = async function (req, res, next) {
   }
 }
 
-
-
 const getBooksNovel = async function (req, res, next) {
   try {
     const userId = req.params.userId
     const category = 'นิยาย'
-    const user = await User.findById(userId).populate('BookSell.books')
+    const user = await User.findById(userId).populate({
+      path: 'bookSell',
+      model: 'Book',
+      match: { category }
+    })
     if (!user) return res.status(404).send('User not found')
-    const bookSell = user.BookSell
-    const filteredBooks = []
-    for (let i = 0; i < bookSell.length; i++) {
-      if (bookSell[i].books[0].category === category) {
-        filteredBooks.push(bookSell[i])
-      }
-    }
-    res.send(filteredBooks)
+    res.send(user.bookSell)
   } catch (err) {
     return res.status(500).send({
       message: err.message
