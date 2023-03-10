@@ -74,6 +74,7 @@ const userSchema = Schema({
   }],
   processedReceipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Receipt' }],
   processedRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Request' }],
+  processedRequestsBook: [{ type: mongoose.Schema.Types.ObjectId, ref: 'RequestBook' }],
   receiptHistory: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Receipt'
