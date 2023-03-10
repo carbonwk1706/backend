@@ -74,7 +74,7 @@ const userSchema = Schema({
   }],
   processedReceipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Receipt' }],
   processedRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Request' }],
-  processedRequestsBook: [{ type: mongoose.Schema.Types.ObjectId, ref: 'RequestBook' }],
+  processedRequestsBook: [{ type: Schema.Types.ObjectId, ref: 'RequestBook' }],
   receiptHistory: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Receipt'
@@ -91,11 +91,18 @@ const userSchema = Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'historyCRUDBook'
   }],
-  BookSell: [{
-    books: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Book' }],
-    addedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-  }],
-  createdAt: { type: Date, default: Date.now }
+  bookSell: [
+    { type: Schema.Types.ObjectId, ref: 'Book' }
+  ],
+  createdAt: { type: Date, default: Date.now },
+  totalRevenue: {
+    type: Number,
+    default: 0
+  },
+  totalSold: {
+    type: Number,
+    default: 0
+  }
 })
 
 userSchema.pre('save', function (next) {
