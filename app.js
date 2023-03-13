@@ -52,6 +52,7 @@ const requestBookRouter = require('./routes/requestBooks')
 const BookSellRouter = require('./routes/usersellbook')
 const totalSoldUserRouter = require('./routes/totalSoldUser')
 const requestPaymentRouter = require('./routes/requestPayment')
+const carouselRouter = require('./routes/Carousel')
 
 mongoose.set('strictQuery', false)
 dotenv.config()
@@ -85,7 +86,7 @@ app.get('/uploads/:filename', (req, res) => {
       console.log('Sent:', fileName)
     }
   })
-}, authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]))
+})
 app.use('/profile', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), profileRouter)
 app.use('/request', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), requestRouter)
 app.use('/books', booksRouter)
@@ -126,5 +127,6 @@ app.use('/requestbook', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.
 app.use('/booksell', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.USER, ROLE.SELL]), BookSellRouter)
 app.use('/totalsolduser', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.SELL]), totalSoldUserRouter)
 app.use('/requestpayment', authenMiddleware, authorizeMiddleware([ROLE.ADMIN, ROLE.LOCAL_ADMIN, ROLE.SELL]), requestPaymentRouter)
+app.use('/carousel', carouselRouter)
 
 module.exports = app

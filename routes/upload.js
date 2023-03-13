@@ -6,6 +6,7 @@ const Receipt = require('../models/Receipt')
 const Request = require('../models/Request')
 const Book = require('../models/Book')
 const RequestBook = require('../models/RequestBook')
+const Carousel = require('../models/CarouselImage')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -130,6 +131,39 @@ router.post('/imageBook/:id', upload.single('image'), async (req, res) => {
     const book = await Book.findByIdAndUpdate(req.params.id, { $set: { imageBook } }, { new: true })
     req.app.get('io').emit('upload-image-book')
     res.status(200).json({ book })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+})
+
+router.post('/carousel', upload.single('image'), async (req, res) => {
+  const host = req.headers.host
+  const protocol = req.protocol
+
+  const image = `${protocol}://${host}/uploads/${req.file.filename}`
+
+  try {
+    const carousel = new Carousel({
+      imageURL: image
+    })
+    await carousel.save()
+    req.app.get('io').emit('upload-image-carousel')
+    res.status(200).json({ carousel })
+  } catch (error) {
+    res.status(500).send(error)
+  }
+})
+
+router.post('/carousel/:id', upload.single('image'), async (req, res) => {
+  const host = req.headers.host
+  const protocol = req.protocol
+
+  const imageURL = `${protocol}://${host}/uploads/${req.file.filename}`
+
+  try {
+    const carousel = await Carousel.findByIdAndUpdate(req.params.id, { $set: { imageURL } }, { new: true })
+    req.app.get('io').emit('edit-image-carousel')
+    res.status(200).json({ carousel })
   } catch (error) {
     res.status(500).send(error)
   }
