@@ -75,9 +75,14 @@ const userSchema = Schema({
   processedReceipts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Receipt' }],
   processedRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Request' }],
   processedRequestsBook: [{ type: Schema.Types.ObjectId, ref: 'RequestBook' }],
+  processedRequestsPayment: [{ type: Schema.Types.ObjectId, ref: 'RequestPayment' }],
   receiptHistory: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Receipt'
+  }],
+  requestPaymentHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'RequestPayment'
   }],
   requestBookHistory: [{
     type: mongoose.Schema.Types.ObjectId,
@@ -100,6 +105,10 @@ const userSchema = Schema({
     default: 0
   },
   totalSold: {
+    type: Number,
+    default: 0
+  },
+  balance: {
     type: Number,
     default: 0
   }
