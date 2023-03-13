@@ -3,13 +3,15 @@ const router = express.Router()
 const Receipt = require('../models/Receipt')
 const Request = require('../models/Request')
 const RequestBook = require('../models/RequestBook')
+const RequestPayment = require('../models/RequestPayment')
 
 const getRequestsAndReceipts = async function (req, res, next) {
   try {
     const requests = await Request.find({ status: 'pending' }).sort({ createdAt: 1 })
     const receipts = await Receipt.find({ status: 'pending' }).sort({ createdAt: 1 })
     const requestBook = await RequestBook.find({ status: 'pending' }).sort({ createdAt: 1 })
-    const combinedData = requests.concat(receipts, requestBook)
+    const requestPayment = await RequestPayment.find({ status: 'pending' }).sort({ createdAt: 1 })
+    const combinedData = requests.concat(receipts, requestBook, requestPayment)
     combinedData.sort((a, b) => {
       return new Date(a.createdAt) - new Date(b.createdAt)
     })
